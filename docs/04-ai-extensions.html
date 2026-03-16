@@ -405,7 +405,7 @@ Note
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(builder_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "1) Row count and freshness — verify the table has recent rows and the total row count matches expectations (compare to previous run/day, or to source system). This catches failed loads or missing recent data.\n\n2) Primary key uniqueness and nulls — ensure the order ID (or composite PK) is present for every row and has no duplicates. This prevents downstream join and aggregation errors.\n\n3) Required-field completeness and basic formats — check key fields (customer_id, order_date, amount/status) are non-null and that formats/values are sane (order_date within expected range, amounts &gt;= 0, status in allowed set)."</code></pre>
+<pre><code>[1] "1) Row-level completeness: check for NULLs or missing values in required key fields (order_id, customer_id, order_date, total_amount). Verify order_id is unique (no duplicates) and customer_id/order_date non-null.\n\n2) Data type and range validity: ensure numeric and date fields conform (total_amount &gt;= 0, quantity &gt; 0, order_date within expected window — not in future or too far past). Confirm types/parsing succeed (dates parseable, amounts numeric).\n\n3) Referential integrity and business logic: confirm customer_id and product_id values exist in reference tables, and that order totals equal the sum of line items where available. Also spot-check statuses (order_status within allowed set) and detect orphaned line items or orders with zero line items."</code></pre>
 </div>
 </div>
 </section>
@@ -427,10 +427,10 @@ Note
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>schema_result <span class="sc">|&gt;</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">collect_df</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                          check_name
-1 Order total consistency: total_amount equals sum of line items and is non-negative
-                                                                                                                                                                                                                                          why_it_matters
-1 Ensures customers are charged correctly and prevents billing/accounting errors or fraud. Keeping totals consistent with line items is critical for invoicing, financial reporting, refunds, and downstream processes (shipping, inventory, analytics).</code></pre>
+<pre><code>                                                               check_name
+1 Foreign key constraint: customer_id must reference an existing customer
+                                                                                                                                                                  why_it_matters
+1 Ensures every order is linked to a valid customer, preventing orphaned orders and preserving referential integrity for accurate reporting, billing, and downstream processing.</code></pre>
 </div>
 </div>
 <p>If a provider ignores native structured outputs, <code>enforce_schema()</code> is the fallback that cleans the text response into the requested shape.</p>
@@ -457,7 +457,7 @@ Note
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(tool_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "42"</code></pre>
+<pre><code>[1] "12 + 30 = 42"</code></pre>
 </div>
 </div>
 </section>
@@ -496,7 +496,7 @@ Note
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>bundle<span class="sc">$</span>prompt_path</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/var/folders/br/z454x1nx287fg3mq63vg3r600000gn/T//Rtmp6cwlrj/file11161bed9357.md"</code></pre>
+<pre><code>[1] "/var/folders/br/z454x1nx287fg3mq63vg3r600000gn/T//RtmpfEIHRv/filefebd4570c204.md"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(bundle<span class="sc">$</span>schema<span class="sc">$</span>fields)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -655,77 +655,18 @@ Note
 </section>
 <section id="example" class="level3" data-number="6.3.2">
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="example"><span class="header-section-number">6.3.2</span> Example</h3>
-<p><code>hidrogen</code> includes its own mock hook, so this chapter can run the exploration workflow without a live model endpoint.</p>
+<p>This example is shown but not executed in the book. <code>hidrogen</code> runs through <code>higpt</code>, so it needs the same provider setup as the live <code>higpt</code> examples or a registered local/OpenAI-compatible model.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hidrogen)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>mock_hidrogen_chat <span class="ot">&lt;-</span> <span class="cf">function</span>(chat_messages, tools, tool_handlers, <span class="at">system_message =</span> <span class="cn">NULL</span>, ...) {</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  handler_names <span class="ot">&lt;-</span> <span class="fu">names</span>(tool_handlers)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"casefile_set_domain"</span> <span class="sc">%in%</span> handler_names) {</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    tool_handlers<span class="sc">$</span><span class="fu">casefile_set_domain</span>(<span class="fu">list</span>(</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">domain =</span> <span class="st">"Vehicle efficiency analysis"</span>,</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">actors =</span> <span class="fu">c</span>(<span class="st">"analytics"</span>, <span class="st">"fleet managers"</span>),</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">kpis =</span> <span class="fu">c</span>(<span class="st">"mpg"</span>)</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    tool_handlers<span class="sc">$</span><span class="fu">casefile_add_hypothesis</span>(<span class="fu">list</span>(</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Heavier cars consume more fuel"</span>,</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">statement =</span> <span class="st">"mpg decreases as weight rises"</span>,</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationale =</span> <span class="st">"The deterministic profile already flags wt vs mpg as a strong negative relationship."</span>,</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">priority =</span> <span class="st">"high"</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"casefile_record_evidence"</span> <span class="sc">%in%</span> handler_names) {</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    tool_handlers<span class="sc">$</span><span class="fu">casefile_record_evidence</span>(<span class="fu">list</span>(</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">hypothesis_id =</span> <span class="st">"hypothesis_001"</span>,</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">summary =</span> <span class="st">"The profile highlights wt vs mpg as one of the strongest negative correlations."</span>,</span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">quality =</span> <span class="st">"stat_summary"</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"casefile_update_hypothesis"</span> <span class="sc">%in%</span> handler_names) {</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    tool_handlers<span class="sc">$</span><span class="fu">casefile_update_hypothesis</span>(<span class="fu">list</span>(</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">hypothesis_id =</span> <span class="st">"hypothesis_001"</span>,</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">status =</span> <span class="st">"supported"</span>,</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">note =</span> <span class="st">"Deterministic diagnostics already support the direction of effect."</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">"submit_exploration_report"</span> <span class="sc">%in%</span> handler_names) {</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>    tool_handlers<span class="sc">$</span><span class="fu">submit_exploration_report</span>(<span class="fu">list</span>(</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">executive_summary =</span> <span class="st">"Exploration complete for a mock fleet-efficiency dataset."</span>,</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">key_insights =</span> <span class="fu">c</span>(<span class="st">"[hypothesis_001] Higher vehicle weight is associated with lower mpg."</span>),</span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">supporting_evidence =</span> <span class="st">"The deterministic profile flagged wt vs mpg as one of the strongest negative correlations."</span>,</span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">next_steps =</span> <span class="fu">c</span>(</span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Fit a baseline regression on mpg ~ wt."</span>,</span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Check whether transmission still matters after controlling for weight."</span></span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>    ))</span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">messages =</span> <span class="fu">data.frame</span>(<span class="at">role =</span> <span class="st">"assistant"</span>, <span class="at">content =</span> <span class="st">"ok"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>hidrogen<span class="sc">::</span><span class="fu">hidrogen_set_llm_mock</span>(</span>
-<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">chat_with_tools =</span> mock_hidrogen_chat,</span>
-<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">continue_chat =</span> <span class="cf">function</span>(...) <span class="st">""</span></span>
-<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(utils<span class="sc">::</span><span class="fu">capture.output</span>({</span>
-<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>  exploration <span class="ot">&lt;-</span> hidrogen<span class="sc">::</span><span class="fu">run_data_explorer</span>(mtcars, <span class="at">sample_rows =</span> <span class="dv">3</span>)</span>
-<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>hidrogen<span class="sc">::</span><span class="fu">hidrogen_reset_llm_mock</span>()</span>
-<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>executive_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Exploration complete for a mock fleet-efficiency dataset."</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>key_insights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "[hypothesis_001] Higher vehicle weight is associated with lower mpg."</code></pre>
-</div>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>exploration <span class="ot">&lt;-</span> hidrogen<span class="sc">::</span><span class="fu">run_data_explorer</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  mtcars,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_rows =</span> <span class="dv">3</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>executive_summary</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>key_insights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="why-it-matters" class="level3" data-number="6.3.3">

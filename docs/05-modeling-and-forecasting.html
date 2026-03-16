@@ -217,13 +217,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#where-himodel-fits" id="toc-where-himodel-fits" class="nav-link active" data-scroll-target="#where-himodel-fits"><span class="header-section-number">7</span> Where <code>himodel</code> fits</a>
   <ul class="collapse">
   <li><a href="#what-it-is-useful-for" id="toc-what-it-is-useful-for" class="nav-link" data-scroll-target="#what-it-is-useful-for"><span class="header-section-number">7.1</span> What it is useful for</a></li>
-  <li><a href="#a-minimal-example" id="toc-a-minimal-example" class="nav-link" data-scroll-target="#a-minimal-example"><span class="header-section-number">7.2</span> A minimal example</a></li>
-  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters"><span class="header-section-number">7.3</span> Why this matters</a></li>
-  <li><a href="#a-simple-visual" id="toc-a-simple-visual" class="nav-link" data-scroll-target="#a-simple-visual"><span class="header-section-number">7.4</span> A simple visual</a></li>
-  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">7.5</span> Try it</a></li>
-  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">7.6</span> Stretch</a></li>
-  <li><a href="#where-it-connects-to-other-packages" id="toc-where-it-connects-to-other-packages" class="nav-link" data-scroll-target="#where-it-connects-to-other-packages"><span class="header-section-number">7.7</span> Where it connects to other packages</a></li>
-  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">7.8</span> Think</a></li>
+  <li><a href="#compute_error-standardize-the-evaluation-layer" id="toc-compute_error-standardize-the-evaluation-layer" class="nav-link" data-scroll-target="#compute_error-standardize-the-evaluation-layer"><span class="header-section-number">7.2</span> <code>compute_error()</code>: standardize the evaluation layer</a></li>
+  <li><a href="#built-in-univariate-models" id="toc-built-in-univariate-models" class="nav-link" data-scroll-target="#built-in-univariate-models"><span class="header-section-number">7.3</span> Built-in univariate models</a></li>
+  <li><a href="#prechecks-and-a-built-in-model" id="toc-prechecks-and-a-built-in-model" class="nav-link" data-scroll-target="#prechecks-and-a-built-in-model"><span class="header-section-number">7.4</span> Prechecks and a built-in model</a></li>
+  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters"><span class="header-section-number">7.5</span> Why this matters</a></li>
+  <li><a href="#a-simple-visual" id="toc-a-simple-visual" class="nav-link" data-scroll-target="#a-simple-visual"><span class="header-section-number">7.6</span> A simple visual</a></li>
+  <li><a href="#define-your-own-univariate-model" id="toc-define-your-own-univariate-model" class="nav-link" data-scroll-target="#define-your-own-univariate-model"><span class="header-section-number">7.7</span> Define your own univariate model</a></li>
+  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">7.8</span> Try it</a></li>
+  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">7.9</span> Stretch</a></li>
+  <li><a href="#where-it-connects-to-other-packages" id="toc-where-it-connects-to-other-packages" class="nav-link" data-scroll-target="#where-it-connects-to-other-packages"><span class="header-section-number">7.10</span> Where it connects to other packages</a></li>
+  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">7.11</span> Think</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/05-modeling-and-forecasting.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -257,13 +260,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="what-it-is-useful-for" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="what-it-is-useful-for"><span class="header-section-number">7.1</span> What it is useful for</h2>
 <ul>
-<li>forecast error calculation</li>
+<li>standardized forecast error calculation</li>
+<li>simple univariate forecasting models</li>
+<li>prechecks that reject series not fit for a given model</li>
+<li>building your own univariate model objects</li>
 <li>forecast reshaping and reallocation</li>
-<li>helper utilities around time-based model workflows</li>
 </ul>
 </section>
-<section id="a-minimal-example" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="a-minimal-example"><span class="header-section-number">7.2</span> A minimal example</h2>
+<section id="compute_error-standardize-the-evaluation-layer" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="compute_error-standardize-the-evaluation-layer"><span class="header-section-number">7.2</span> <code>compute_error()</code>: standardize the evaluation layer</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(himodel)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -288,73 +293,307 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 2 B         5   245   240 0.0204 -0.0204</code></pre>
 </div>
 </div>
+<p>The key idea is that <code>himodel</code> separates:</p>
+<ul>
+<li>the level at which forecasts were made</li>
+<li>the level at which results are reported</li>
+</ul>
+<p>That is one reason it fits well in a shared forecasting workflow rather than as just another collection of ad hoc helper functions.</p>
 </section>
-<section id="why-this-matters" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="why-this-matters"><span class="header-section-number">7.3</span> Why this matters</h2>
+<section id="built-in-univariate-models" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="built-in-univariate-models"><span class="header-section-number">7.3</span> Built-in univariate models</h2>
+<p><code>himodel</code> already ships a small family of simple univariate forecasting models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>himodel<span class="sc">::</span><span class="fu">list_univariate_models</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  model create_function model_name            model_description                 
+  &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;                 &lt;chr&gt;                             
+1 lya   make_model_lya  Last Year Average     Predicts as per prior year averag…
+2 ros   make_model_ros  ROS Model             Predicts using recent rate of sal…
+3 lyr   make_model_lyr  Last Year Repeat      Repeats Prior year actuals (over …
+4 sgm   make_model_sgm  Simple Growth Model   Adjusts prior year actuals using …
+5 sdm   make_model_sdm  Simple Date Model     Models volume as a sum of Month-O…
+6 agm   make_model_agm  Adaptive Growth Model Models volume as a functtion of r…</code></pre>
+</div>
+</div>
+<p>These are not meant to replace every forecasting technique in R. They are useful because they are simple, inspectable, and packaged in a common interface.</p>
+</section>
+<section id="prechecks-and-a-built-in-model" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="prechecks-and-a-built-in-model"><span class="header-section-number">7.4</span> Prechecks and a built-in model</h2>
+<p>The package has an explicit idea of a precheck: before you forecast anything, decide whether the series is suitable for the method you want to run.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>all_dates <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2024-01-07"</span>), <span class="at">by =</span> <span class="st">"week"</span>, <span class="at">length.out =</span> <span class="dv">64</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>make_hist <span class="ot">&lt;-</span> <span class="cf">function</span>(sku, offset, promo_bump) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  actual_vals <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">+</span> offset <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="fu">seq_len</span>(<span class="dv">56</span>) <span class="sc">/</span> <span class="dv">6</span>) <span class="sc">+</span> <span class="fu">seq_len</span>(<span class="dv">56</span>) <span class="sc">*</span> <span class="fl">0.25</span>, <span class="dv">1</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  future_actuals <span class="ot">&lt;-</span> <span class="fu">round</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span> <span class="sc">+</span> offset <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">57</span><span class="sc">:</span><span class="dv">64</span> <span class="sc">/</span> <span class="dv">6</span>) <span class="sc">+</span> (<span class="dv">57</span><span class="sc">:</span><span class="dv">64</span>) <span class="sc">*</span> <span class="fl">0.25</span> <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">0</span>, promo_bump, <span class="dv">0</span>, <span class="dv">0</span>, promo_bump, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">actual =</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">sku =</span> sku,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">date =</span> all_dates[<span class="dv">1</span><span class="sc">:</span><span class="dv">56</span>],</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">promo_strength =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">40</span>), <span class="fu">rep</span>(<span class="fl">0.2</span>, <span class="dv">8</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">8</span>)),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">actual =</span> actual_vals</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">holdout =</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">sku =</span> sku,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">date =</span> all_dates[<span class="dv">57</span><span class="sc">:</span><span class="dv">64</span>],</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">actual =</span> future_actuals</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">make_hist</span>(<span class="st">"A"</span>, <span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">make_hist</span>(<span class="st">"B"</span>, <span class="sc">-</span><span class="dv">18</span>, <span class="dv">9</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>actual_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(a<span class="sc">$</span>actual, b<span class="sc">$</span>actual)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>future_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">sku =</span> <span class="st">"A"</span>, <span class="at">date =</span> all_dates[<span class="dv">57</span><span class="sc">:</span><span class="dv">64</span>], <span class="at">promo_strength =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">sku =</span> <span class="st">"B"</span>, <span class="at">date =</span> all_dates[<span class="dv">57</span><span class="sc">:</span><span class="dv">64</span>], <span class="at">promo_strength =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>holdout_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(a<span class="sc">$</span>holdout, b<span class="sc">$</span>holdout)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lya_model <span class="ot">&lt;-</span> himodel<span class="sc">::</span><span class="fu">make_model_lya</span>(<span class="st">"Weeks"</span>, <span class="at">generic_prechecks =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>himodel<span class="sc">::</span><span class="fu">precheck</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  lya_model,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  actual_df <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(date, actual, promo_strength),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  future_df <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(date, promo_strength)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>That returns <code>TRUE</code> here, meaning the series is suitable for a last-year-average model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lya_forecast <span class="ot">&lt;-</span> himodel<span class="sc">::</span><span class="fu">run_univariate_model</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  lya_model,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  actual_df,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  future_df,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_vars =</span> <span class="st">"sku"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>lya_forecast</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 5
+   sku   date       promo_strength baseline total
+   &lt;chr&gt; &lt;date&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1 A     2025-02-02            0      108.  108. 
+ 2 A     2025-02-09            0.3    108.  118. 
+ 3 A     2025-02-16            0      108.  108. 
+ 4 A     2025-02-23            0      108.  108. 
+ 5 A     2025-03-02            0.2    108.  118. 
+ 6 A     2025-03-09            0      108.  108. 
+ 7 A     2025-03-16            0      108.  108. 
+ 8 A     2025-03-23            0      108.  108. 
+ 9 B     2025-02-02            0       89.7  89.7
+10 B     2025-02-09            0       89.7  89.7
+11 B     2025-02-16            0.2     89.7  99.9
+12 B     2025-02-23            0       89.7  89.7
+13 B     2025-03-02            0       89.7  89.7
+14 B     2025-03-09            0.3     89.7  99.9
+15 B     2025-03-16            0       89.7  89.7
+16 B     2025-03-23            0       89.7  89.7</code></pre>
+</div>
+</div>
+<p>Now evaluate the forecast on a simple holdout.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>evaluation_df <span class="ot">&lt;-</span> lya_forecast <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(holdout_df, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"sku"</span>, <span class="st">"date"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(sku, actual, <span class="at">forecast =</span> total)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>himodel<span class="sc">::</span><span class="fu">compute_error</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  evaluation_df,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure_level =</span> <span class="st">"sku"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">report_level =</span> <span class="st">"sku"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">actual_var =</span> <span class="st">"actual"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred_var =</span> <span class="st">"forecast"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  sku       E     A     P     rE      rB
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1 A      26.9  908.  882. 0.0296 -0.0296
+2 B      20.9  758.  738. 0.0275 -0.0275</code></pre>
+</div>
+</div>
+</section>
+<section id="why-this-matters" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="why-this-matters"><span class="header-section-number">7.5</span> Why this matters</h2>
 <p>A lot of poor forecasting practice starts before the model itself:</p>
 <ul>
 <li>wrong aggregation level</li>
+<li>unfit time series sent into the wrong model</li>
 <li>poor error reporting</li>
 <li>hidden bias</li>
 <li>weak hierarchy handling</li>
 </ul>
 <p><code>himodel</code> is useful when you want a standard way to talk about those things.</p>
 </section>
-<section id="a-simple-visual" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="a-simple-visual"><span class="header-section-number">7.4</span> A simple visual</h2>
+<section id="a-simple-visual" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="a-simple-visual"><span class="header-section-number">7.6</span> A simple visual</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">120</span>, <span class="dv">110</span>, <span class="dv">80</span>, <span class="dv">75</span>, <span class="dv">90</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>forecast <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">95</span>, <span class="dv">130</span>, <span class="dv">100</span>, <span class="dv">82</span>, <span class="dv">70</span>, <span class="dv">88</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>period <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(actual)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  period,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(actual, forecast),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"b"</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">17</span>),</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#0b6e69"</span>, <span class="st">"#a44a1f"</span>),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Period"</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Value"</span>,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Actuals vs forecast"</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topright"</span>,</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Actual"</span>, <span class="st">"Forecast"</span>),</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#0b6e69"</span>, <span class="st">"#a44a1f"</span>),</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">17</span>),</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> actual_df <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(date, actual) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    lya_forecast <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">transmute</span>(date, <span class="at">actual =</span> total)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>hist_df <span class="ot">&lt;-</span> actual_df <span class="sc">|&gt;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(date, actual)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>forecast_df <span class="ot">&lt;-</span> lya_forecast <span class="sc">|&gt;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(date, <span class="at">forecast =</span> total)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>holdout_plot_df <span class="ot">&lt;-</span> holdout_df <span class="sc">|&gt;</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(sku <span class="sc">==</span> <span class="st">"A"</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(hist_df<span class="sc">$</span>date, forecast_df<span class="sc">$</span>date),</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">cbind</span>(</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(hist_df<span class="sc">$</span>actual, <span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="fu">nrow</span>(forecast_df))),</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="fu">nrow</span>(hist_df)), forecast_df<span class="sc">$</span>forecast),</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="fu">nrow</span>(hist_df)), holdout_plot_df<span class="sc">$</span>actual)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"l"</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#0b6e69"</span>, <span class="st">"#a44a1f"</span>, <span class="st">"#3b3b3b"</span>),</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Week"</span>,</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Value"</span>,</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Built-in himodel forecast vs holdout actuals"</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topright"</span>,</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"History"</span>, <span class="st">"Forecast"</span>, <span class="st">"Holdout actual"</span>),</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#0b6e69"</span>, <span class="st">"#a44a1f"</span>, <span class="st">"#3b3b3b"</span>),</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-modeling-and-forecasting_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="05-modeling-and-forecasting_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="try-it" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="try-it"><span class="header-section-number">7.5</span> Try it</h2>
+<section id="define-your-own-univariate-model" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="define-your-own-univariate-model"><span class="header-section-number">7.7</span> Define your own univariate model</h2>
+<p>One of the more underrated ideas in <code>himodel</code> is that a model can be a small object plus S3 methods. If you can define:</p>
+<ul>
+<li><code>precheck.&lt;class&gt;()</code></li>
+<li><code>estimate.&lt;class&gt;()</code></li>
+<li><code>model_version.&lt;class&gt;()</code></li>
+</ul>
+<p>then you can plug your own model into the same workflow.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>make_model_demo_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">freq =</span> <span class="st">"Weeks"</span>, <span class="at">lookback =</span> <span class="dv">8</span>, <span class="at">generic_prechecks =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">freq =</span> freq,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">lookback =</span> lookback,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">generic_prechecks =</span> generic_prechecks</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(model) <span class="ot">&lt;-</span> <span class="st">"demo_mean"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  model<span class="sc">$</span>version <span class="ot">&lt;-</span> himodel<span class="sc">::</span><span class="fu">model_version</span>(model)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  model</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>precheck.demo_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(method, actual_df, future_df, ...) {</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method<span class="sc">$</span>generic_prechecks) {</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    himodel<span class="sc">::</span><span class="fu">generic_prechecks</span>(method<span class="sc">$</span>freq, actual_df, future_df)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(actual_df) <span class="sc">&gt;=</span> method<span class="sc">$</span>lookback</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>estimate.demo_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(method, actual_df, future_df, ...) {</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  avg <span class="ot">&lt;-</span> <span class="fu">mean</span>(utils<span class="sc">::</span><span class="fu">tail</span>(actual_df<span class="sc">$</span>actual, method<span class="sc">$</span>lookback))</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(future_df, <span class="at">baseline =</span> avg, <span class="at">total =</span> avg)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>model_version.demo_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(method, ...) {</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"0.1.0"</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>demo_model <span class="ot">&lt;-</span> <span class="fu">make_model_demo_mean</span>()</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>demo_model<span class="sc">$</span>version</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.1.0"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>himodel<span class="sc">::</span><span class="fu">run_univariate_model</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  demo_model,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  actual_df,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  future_df,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_vars =</span> <span class="st">"sku"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 5
+   sku   date       promo_strength baseline total
+   &lt;chr&gt; &lt;date&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1 A     2025-02-02            0      118.  118. 
+ 2 A     2025-02-09            0.3    118.  118. 
+ 3 A     2025-02-16            0      118.  118. 
+ 4 A     2025-02-23            0      118.  118. 
+ 5 A     2025-03-02            0.2    118.  118. 
+ 6 A     2025-03-09            0      118.  118. 
+ 7 A     2025-03-16            0      118.  118. 
+ 8 A     2025-03-23            0      118.  118. 
+ 9 B     2025-02-02            0       99.8  99.8
+10 B     2025-02-09            0       99.8  99.8
+11 B     2025-02-16            0.2     99.8  99.8
+12 B     2025-02-23            0       99.8  99.8
+13 B     2025-03-02            0       99.8  99.8
+14 B     2025-03-09            0.3     99.8  99.8
+15 B     2025-03-16            0       99.8  99.8
+16 B     2025-03-23            0       99.8  99.8</code></pre>
+</div>
+</div>
+</section>
+<section id="try-it" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="try-it"><span class="header-section-number">7.8</span> Try it</h2>
 <ol type="1">
-<li>Build a toy forecast-versus-actual dataset for two products or customers.</li>
-<li>Compute the error summary.</li>
-<li>Identify which series has the worst relative bias.</li>
+<li>Run <code>list_univariate_models()</code> and pick one model you have not used before.</li>
+<li>Build a small weekly series and run <code>precheck()</code> on it.</li>
+<li>Forecast a short holdout and compute the error summary.</li>
+<li>Decide whether the model is plausible or just a baseline.</li>
 </ol>
 </section>
-<section id="stretch" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="stretch"><span class="header-section-number">7.6</span> Stretch</h2>
-<p>Use a monthly series such as <code>AirPassengers</code> or a small project series and ask:</p>
+<section id="stretch" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="stretch"><span class="header-section-number">7.9</span> Stretch</h2>
+<p>Create a small custom model object that does something simple but explicit, for example:</p>
 <ol type="1">
-<li>what is the reporting level?</li>
-<li>what is the measurement level?</li>
-<li>what would a stakeholder want to see in an error report?</li>
+<li>rolling mean of the last <code>k</code> periods</li>
+<li>last non-zero value</li>
+<li>mean of the last year, but only on non-promo periods</li>
 </ol>
-<p>Then sketch the table you would want <code>himodel</code> to produce.</p>
+<p>Then add:</p>
+<ol type="1">
+<li>a <code>precheck.&lt;class&gt;()</code></li>
+<li>an <code>estimate.&lt;class&gt;()</code></li>
+<li>a <code>model_version.&lt;class&gt;()</code></li>
+</ol>
+<p>and run it with <code>run_univariate_model()</code>.</p>
 </section>
-<section id="where-it-connects-to-other-packages" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="where-it-connects-to-other-packages"><span class="header-section-number">7.7</span> Where it connects to other packages</h2>
+<section id="where-it-connects-to-other-packages" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="where-it-connects-to-other-packages"><span class="header-section-number">7.10</span> Where it connects to other packages</h2>
 <ul>
 <li><code>hidate</code> for time boundaries</li>
 <li><code>himunge</code> for shaping the input data</li>
@@ -362,12 +601,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>higrate</code> if you want AI-generated narratives around modeled tables</li>
 </ul>
 </section>
-<section id="think" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="think"><span class="header-section-number">7.8</span> Think</h2>
+<section id="think" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="think"><span class="header-section-number">7.11</span> Think</h2>
 <p>What is the fastest way to lose stakeholder trust in a forecasting project:</p>
 <ul>
-<li>a small model miss</li>
-<li>or unclear, inconsistent error reporting?</li>
+<li>a slightly weak model</li>
+<li>or a workflow that cannot explain why the model should be trusted?</li>
 </ul>
 
 

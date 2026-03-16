@@ -341,70 +341,19 @@ rather than one-off prompts.
 
 ### Example
 
-`hidrogen` includes its own mock hook, so this chapter can run the exploration
-workflow without a live model endpoint.
+This example is shown but not executed in the book. `hidrogen` runs through
+`higpt`, so it needs the same provider setup as the live `higpt` examples or a
+registered local/OpenAI-compatible model.
 
 ```{r}
+#| eval: false
 library(hidrogen)
 
-mock_hidrogen_chat <- function(chat_messages, tools, tool_handlers, system_message = NULL, ...) {
-  handler_names <- names(tool_handlers)
-
-  if ("casefile_set_domain" %in% handler_names) {
-    tool_handlers$casefile_set_domain(list(
-      domain = "Vehicle efficiency analysis",
-      actors = c("analytics", "fleet managers"),
-      kpis = c("mpg")
-    ))
-    tool_handlers$casefile_add_hypothesis(list(
-      title = "Heavier cars consume more fuel",
-      statement = "mpg decreases as weight rises",
-      rationale = "The deterministic profile already flags wt vs mpg as a strong negative relationship.",
-      priority = "high"
-    ))
-  }
-
-  if ("casefile_record_evidence" %in% handler_names) {
-    tool_handlers$casefile_record_evidence(list(
-      hypothesis_id = "hypothesis_001",
-      summary = "The profile highlights wt vs mpg as one of the strongest negative correlations.",
-      quality = "stat_summary"
-    ))
-  }
-
-  if ("casefile_update_hypothesis" %in% handler_names) {
-    tool_handlers$casefile_update_hypothesis(list(
-      hypothesis_id = "hypothesis_001",
-      status = "supported",
-      note = "Deterministic diagnostics already support the direction of effect."
-    ))
-  }
-
-  if ("submit_exploration_report" %in% handler_names) {
-    tool_handlers$submit_exploration_report(list(
-      executive_summary = "Exploration complete for a mock fleet-efficiency dataset.",
-      key_insights = c("[hypothesis_001] Higher vehicle weight is associated with lower mpg."),
-      supporting_evidence = "The deterministic profile flagged wt vs mpg as one of the strongest negative correlations.",
-      next_steps = c(
-        "Fit a baseline regression on mpg ~ wt.",
-        "Check whether transmission still matters after controlling for weight."
-      )
-    ))
-  }
-
-  list(messages = data.frame(role = "assistant", content = "ok", stringsAsFactors = FALSE))
-}
-
-hidrogen::hidrogen_set_llm_mock(
-  chat_with_tools = mock_hidrogen_chat,
-  continue_chat = function(...) ""
+exploration <- hidrogen::run_data_explorer(
+  mtcars,
+  sample_rows = 3,
+  model_name = "gpt-mini-latest"
 )
-
-invisible(utils::capture.output({
-  exploration <- hidrogen::run_data_explorer(mtcars, sample_rows = 3)
-}))
-
-hidrogen::hidrogen_reset_llm_mock()
 
 exploration$report$executive_summary
 exploration$report$key_insights

@@ -12,11 +12,13 @@ flavor, not as a general replacement for all of R's modeling ecosystem.
 
 ## What it is useful for
 
-- forecast error calculation
+- standardized forecast error calculation
+- simple univariate forecasting models
+- prechecks that reject series not fit for a given model
+- building your own univariate model objects
 - forecast reshaping and reallocation
-- helper utilities around time-based model workflows
 
-## A minimal example
+## `compute_error()`: standardize the evaluation layer
 
 ```{r}
 library(himodel)
@@ -36,11 +38,119 @@ himodel::compute_error(
 )
 ```
 
+The key idea is that `himodel` separates:
+
+- the level at which forecasts were made
+- the level at which results are reported
+
+That is one reason it fits well in a shared forecasting workflow rather than as
+just another collection of ad hoc helper functions.
+
+## Built-in univariate models
+
+`himodel` already ships a small family of simple univariate forecasting models.
+
+```{r}
+himodel::list_univariate_models()
+```
+
+These are not meant to replace every forecasting technique in R. They are
+useful because they are simple, inspectable, and packaged in a common interface.
+
+## Prechecks and a built-in model
+
+The package has an explicit idea of a precheck: before you forecast anything,
+decide whether the series is suitable for the method you want to run.
+
+```{r}
+library(dplyr)
+
+all_dates <- seq(as.Date("2024-01-07"), by = "week", length.out = 64)
+
+make_hist <- function(sku, offset, promo_bump) {
+  actual_vals <- round(100 + offset + 8 * sin(seq_len(56) / 6) + seq_len(56) * 0.25, 1)
+  future_actuals <- round(
+    100 + offset + 8 * sin(57:64 / 6) + (57:64) * 0.25 +
+      c(0, promo_bump, 0, 0, promo_bump, 0, 0, 0),
+    1
+  )
+
+  list(
+    actual = data.frame(
+      sku = sku,
+      date = all_dates[1:56],
+      promo_strength = c(rep(0, 40), rep(0.2, 8), rep(0, 8)),
+      actual = actual_vals
+    ),
+    holdout = data.frame(
+      sku = sku,
+      date = all_dates[57:64],
+      actual = future_actuals
+    )
+  )
+}
+
+a <- make_hist("A", 0, 12)
+b <- make_hist("B", -18, 9)
+
+actual_df <- bind_rows(a$actual, b$actual)
+future_df <- bind_rows(
+  data.frame(sku = "A", date = all_dates[57:64], promo_strength = c(0, 0.3, 0, 0, 0.2, 0, 0, 0)),
+  data.frame(sku = "B", date = all_dates[57:64], promo_strength = c(0, 0, 0.2, 0, 0, 0.3, 0, 0))
+)
+holdout_df <- bind_rows(a$holdout, b$holdout)
+```
+
+```{r}
+lya_model <- himodel::make_model_lya("Weeks", generic_prechecks = TRUE)
+
+himodel::precheck(
+  lya_model,
+  actual_df |>
+    dplyr::filter(sku == "A") |>
+    dplyr::select(date, actual, promo_strength),
+  future_df |>
+    dplyr::filter(sku == "A") |>
+    dplyr::select(date, promo_strength)
+)
+```
+
+That returns `TRUE` here, meaning the series is suitable for a last-year-average
+model.
+
+```{r}
+lya_forecast <- himodel::run_univariate_model(
+  lya_model,
+  actual_df,
+  future_df,
+  group_vars = "sku"
+)
+
+lya_forecast
+```
+
+Now evaluate the forecast on a simple holdout.
+
+```{r}
+evaluation_df <- lya_forecast |>
+  dplyr::left_join(holdout_df, by = c("sku", "date")) |>
+  dplyr::transmute(sku, actual, forecast = total)
+
+himodel::compute_error(
+  evaluation_df,
+  measure_level = "sku",
+  report_level = "sku",
+  actual_var = "actual",
+  pred_var = "forecast"
+)
+```
+
 ## Why this matters
 
 A lot of poor forecasting practice starts before the model itself:
 
 - wrong aggregation level
+- unfit time series sent into the wrong model
 - poor error reporting
 - hidden bias
 - weak hierarchy handling
@@ -50,46 +160,123 @@ A lot of poor forecasting practice starts before the model itself:
 ## A simple visual
 
 ```{r}
-actual <- c(100, 120, 110, 80, 75, 90)
-forecast <- c(95, 130, 100, 82, 70, 88)
-period <- seq_along(actual)
+plot_df <- actual_df |>
+  dplyr::filter(sku == "A") |>
+  dplyr::select(date, actual) |>
+  dplyr::bind_rows(
+    lya_forecast |>
+      dplyr::filter(sku == "A") |>
+      dplyr::transmute(date, actual = total)
+  )
+
+hist_df <- actual_df |>
+  dplyr::filter(sku == "A") |>
+  dplyr::select(date, actual)
+
+forecast_df <- lya_forecast |>
+  dplyr::filter(sku == "A") |>
+  dplyr::transmute(date, forecast = total)
+
+holdout_plot_df <- holdout_df |>
+  dplyr::filter(sku == "A")
 
 matplot(
-  period,
-  cbind(actual, forecast),
-  type = "b",
-  pch = c(16, 17),
+  x = c(hist_df$date, forecast_df$date),
+  y = cbind(
+    c(hist_df$actual, rep(NA_real_, nrow(forecast_df))),
+    c(rep(NA_real_, nrow(hist_df)), forecast_df$forecast),
+    c(rep(NA_real_, nrow(hist_df)), holdout_plot_df$actual)
+  ),
+  type = "l",
   lty = 1,
-  col = c("#0b6e69", "#a44a1f"),
-  xlab = "Period",
+  lwd = c(2, 2, 2),
+  col = c("#0b6e69", "#a44a1f", "#3b3b3b"),
+  xlab = "Week",
   ylab = "Value",
-  main = "Actuals vs forecast"
+  main = "Built-in himodel forecast vs holdout actuals"
 )
 legend(
   "topright",
-  legend = c("Actual", "Forecast"),
-  col = c("#0b6e69", "#a44a1f"),
+  legend = c("History", "Forecast", "Holdout actual"),
+  col = c("#0b6e69", "#a44a1f", "#3b3b3b"),
   lty = 1,
-  pch = c(16, 17),
   bty = "n"
+)
+```
+
+## Define your own univariate model
+
+One of the more underrated ideas in `himodel` is that a model can be a small
+object plus S3 methods. If you can define:
+
+- `precheck.<class>()`
+- `estimate.<class>()`
+- `model_version.<class>()`
+
+then you can plug your own model into the same workflow.
+
+```{r}
+make_model_demo_mean <- function(freq = "Weeks", lookback = 8, generic_prechecks = TRUE) {
+  model <- list(
+    freq = freq,
+    lookback = lookback,
+    generic_prechecks = generic_prechecks
+  )
+  class(model) <- "demo_mean"
+  model$version <- himodel::model_version(model)
+  model
+}
+
+precheck.demo_mean <- function(method, actual_df, future_df, ...) {
+  if (method$generic_prechecks) {
+    himodel::generic_prechecks(method$freq, actual_df, future_df)
+  }
+  nrow(actual_df) >= method$lookback
+}
+
+estimate.demo_mean <- function(method, actual_df, future_df, ...) {
+  avg <- mean(utils::tail(actual_df$actual, method$lookback))
+  dplyr::mutate(future_df, baseline = avg, total = avg)
+}
+
+model_version.demo_mean <- function(method, ...) {
+  "0.1.0"
+}
+
+demo_model <- make_model_demo_mean()
+demo_model$version
+
+himodel::run_univariate_model(
+  demo_model,
+  actual_df,
+  future_df,
+  group_vars = "sku"
 )
 ```
 
 ## Try it
 
-1. Build a toy forecast-versus-actual dataset for two products or customers.
-2. Compute the error summary.
-3. Identify which series has the worst relative bias.
+1. Run `list_univariate_models()` and pick one model you have not used before.
+2. Build a small weekly series and run `precheck()` on it.
+3. Forecast a short holdout and compute the error summary.
+4. Decide whether the model is plausible or just a baseline.
 
 ## Stretch
 
-Use a monthly series such as `AirPassengers` or a small project series and ask:
+Create a small custom model object that does something simple but explicit, for
+example:
 
-1. what is the reporting level?
-2. what is the measurement level?
-3. what would a stakeholder want to see in an error report?
+1. rolling mean of the last `k` periods
+2. last non-zero value
+3. mean of the last year, but only on non-promo periods
 
-Then sketch the table you would want `himodel` to produce.
+Then add:
+
+1. a `precheck.<class>()`
+2. an `estimate.<class>()`
+3. a `model_version.<class>()`
+
+and run it with `run_univariate_model()`.
 
 ## Where it connects to other packages
 
@@ -102,5 +289,5 @@ Then sketch the table you would want `himodel` to produce.
 
 What is the fastest way to lose stakeholder trust in a forecasting project:
 
-- a small model miss
-- or unclear, inconsistent error reporting?
+- a slightly weak model
+- or a workflow that cannot explain why the model should be trusted?
