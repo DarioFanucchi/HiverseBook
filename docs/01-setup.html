@@ -201,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08-capstone.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Capstone Exercises</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Exercises</span></span></a>
   </div>
 </li>
     </ul>
@@ -220,11 +220,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#step-2-install-hiverse" id="toc-step-2-install-hiverse" class="nav-link" data-scroll-target="#step-2-install-hiverse"><span class="header-section-number">3.2</span> Step 2: install <code>hiverse</code></a></li>
   <li><a href="#step-3-install-the-common-package-set" id="toc-step-3-install-the-common-package-set" class="nav-link" data-scroll-target="#step-3-install-the-common-package-set"><span class="header-section-number">3.3</span> Step 3: install the common package set</a></li>
   <li><a href="#step-4-install-optional-packages-only-when-needed" id="toc-step-4-install-optional-packages-only-when-needed" class="nav-link" data-scroll-target="#step-4-install-optional-packages-only-when-needed"><span class="header-section-number">3.4</span> Step 4: install optional packages only when needed</a></li>
-  <li><a href="#a-quick-installation-check" id="toc-a-quick-installation-check" class="nav-link" data-scroll-target="#a-quick-installation-check"><span class="header-section-number">3.5</span> A quick installation check</a></li>
-  <li><a href="#recommended-learning-order" id="toc-recommended-learning-order" class="nav-link" data-scroll-target="#recommended-learning-order"><span class="header-section-number">3.6</span> Recommended learning order</a></li>
-  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">3.7</span> Try it</a></li>
-  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">3.8</span> Stretch</a></li>
-  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">3.9</span> Think</a></li>
+  <li><a href="#optional-configure-ai-provider-keys" id="toc-optional-configure-ai-provider-keys" class="nav-link" data-scroll-target="#optional-configure-ai-provider-keys"><span class="header-section-number">3.5</span> Optional: configure AI provider keys</a></li>
+  <li><a href="#a-quick-installation-check" id="toc-a-quick-installation-check" class="nav-link" data-scroll-target="#a-quick-installation-check"><span class="header-section-number">3.6</span> A quick installation check</a></li>
+  <li><a href="#recommended-learning-order" id="toc-recommended-learning-order" class="nav-link" data-scroll-target="#recommended-learning-order"><span class="header-section-number">3.7</span> Recommended learning order</a></li>
+  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">3.8</span> Try it</a></li>
+  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">3.9</span> Stretch</a></li>
+  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">3.10</span> Think</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/01-setup.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
@@ -310,23 +311,38 @@ Warning
 </div>
 <p>Other optional packages exist as well, especially for supply-chain work, but you do not need all of them on day one.</p>
 </section>
-<section id="a-quick-installation-check" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="a-quick-installation-check"><span class="header-section-number">3.5</span> A quick installation check</h2>
+<section id="optional-configure-ai-provider-keys" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="optional-configure-ai-provider-keys"><span class="header-section-number">3.5</span> Optional: configure AI provider keys</h2>
+<p>If you want the <code>higpt</code> examples in this book to run live, set the provider key you plan to use in <code>~/.Renviron</code>.</p>
+<p>For the OpenAI-based examples in this book, the main requirement is:</p>
+<pre class="text"><code>OPENAI_API_KEY=sk-...</code></pre>
+<p>Other providers supported by <code>higpt</code> use:</p>
+<pre class="text"><code>GEMINI_API_KEY=...
+ANTHROPIC_API_KEY=...
+# or
+CLAUDE_API_KEY=...
+XAI_API_KEY=...
+# or
+GROK_API_KEY=...</code></pre>
+<p>Restart R after saving so the environment variables are visible in your session.</p>
+</section>
+<section id="a-quick-installation-check" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="a-quick-installation-check"><span class="header-section-number">3.6</span> A quick installation check</h2>
 <p>Once packages are installed, run a quick sanity check:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>required_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hiverse"</span>, <span class="st">"himunge"</span>, <span class="st">"hiconnect"</span>, <span class="st">"hidate"</span>, <span class="st">"hilog"</span>, <span class="st">"hiproc"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"higpt"</span>, <span class="st">"higrate"</span>, <span class="st">"hidrogen"</span>, <span class="st">"himodel"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> required_pkgs,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">installed =</span> <span class="fu">vapply</span>(required_pkgs, requireNamespace, <span class="fu">logical</span>(<span class="dv">1</span>), <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>required_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hiverse"</span>, <span class="st">"himunge"</span>, <span class="st">"hiconnect"</span>, <span class="st">"hidate"</span>, <span class="st">"hilog"</span>, <span class="st">"hiproc"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"higpt"</span>, <span class="st">"higrate"</span>, <span class="st">"hidrogen"</span>, <span class="st">"himodel"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> required_pkgs,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">installed =</span> <span class="fu">vapply</span>(required_pkgs, requireNamespace, <span class="fu">logical</span>(<span class="dv">1</span>), <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="recommended-learning-order" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="recommended-learning-order"><span class="header-section-number">3.6</span> Recommended learning order</h2>
+<section id="recommended-learning-order" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="recommended-learning-order"><span class="header-section-number">3.7</span> Recommended learning order</h2>
 <p>If you are a new joiner and want the shortest path to competence:</p>
 <ol type="1">
 <li><code>himunge</code></li>
@@ -341,8 +357,8 @@ Warning
 <li><code>hipoint</code> or <code>hisched</code> if your project calls for them</li>
 </ol>
 </section>
-<section id="try-it" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="try-it"><span class="header-section-number">3.7</span> Try it</h2>
+<section id="try-it" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="try-it"><span class="header-section-number">3.8</span> Try it</h2>
 <ol type="1">
 <li>Install <code>hiverse</code>.</li>
 <li>Install the common packages.</li>
@@ -350,8 +366,8 @@ Warning
 <li>Write down which packages failed to install, if any, and why.</li>
 </ol>
 </section>
-<section id="stretch" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="stretch"><span class="header-section-number">3.8</span> Stretch</h2>
+<section id="stretch" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="stretch"><span class="header-section-number">3.9</span> Stretch</h2>
 <p>Create a small script called <code>check_hiverse_install.R</code> that:</p>
 <ul>
 <li>checks a package list</li>
@@ -360,8 +376,8 @@ Warning
 </ul>
 <p>This is a good first “works on my machine” diagnostic to keep around.</p>
 </section>
-<section id="think" class="level2" data-number="3.9">
-<h2 data-number="3.9" class="anchored" data-anchor-id="think"><span class="header-section-number">3.9</span> Think</h2>
+<section id="think" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="think"><span class="header-section-number">3.10</span> Think</h2>
 <p>Why is <code>hiverse</code> useful even if you could install every package directly with <code>devtools::install_gitlab()</code>?</p>
 
 

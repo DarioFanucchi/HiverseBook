@@ -22,117 +22,18 @@ output, you often need process context, not just data context.
 
 ### Example
 
-The book renders this example against a tiny mocked process registry so that
-the actual `hiproc` calls can run without Hudson access.
+This example is intentionally shown but not executed in the book, because it
+depends on a live Hudson process registry and database access.
 
 ```{r}
-#| echo: false
-with_mocked_hiconnect_pg_get_query <- function(mock_fn, expr) {
-  ns <- asNamespace("hiconnect")
-  old <- get("pg_get_query", envir = ns)
-  unlockBinding("pg_get_query", ns)
-  assign("pg_get_query", mock_fn, envir = ns)
-  lockBinding("pg_get_query", ns)
-  on.exit({
-    unlockBinding("pg_get_query", ns)
-    assign("pg_get_query", old, envir = ns)
-    lockBinding("pg_get_query", ns)
-  }, add = TRUE)
-  force(expr)
-}
-
-mock_process_pg_get_query <- function(schemas = NULL, statement = NULL, params = NULL, con = NULL, ...) {
-  sql <- gsub("\\s+", " ", statement)
-
-  if (grepl("from process.process pp left join process.event pe", sql, fixed = TRUE)) {
-    return(data.frame(
-      name = c("ingest_orders", "ingest_orders", "build_dashboard"),
-      process_id = c(1L, 1L, 2L),
-      event_type = c("Success", "Failed", "Success"),
-      first_run_date = as.Date(c("2026-01-01", "2026-01-05", "2026-01-02")),
-      last_run_date = as.Date(c("2026-01-10", "2026-01-12", "2026-01-15")),
-      last_process_result_id = c(10L, 12L, 15L),
-      num_runs = c(5L, 1L, 4L)
-    ))
-  }
-
-  if (grepl("select process_id from process.process where name = \\$1", sql)) {
-    ids <- c(ingest_orders = 1L, build_dashboard = 2L)
-    return(data.frame(process_id = ids[[params[[1]]]]))
-  }
-
-  if (grepl("process_dependency_process", sql)) {
-    return(data.frame(
-      name = c("build_dashboard"),
-      process_id = c(2L),
-      dependency_process_id = c(1L),
-      dependency_process_name = c("ingest_orders"),
-      output_schema = c("scratch"),
-      output_table = c("orders"),
-      group_id = c(1L),
-      group_name = c("upstream process"),
-      data_only = c(FALSE),
-      cyclic = c(FALSE)
-    ))
-  }
-
-  if (grepl("process_dependency_static", sql)) {
-    return(data.frame(
-      process_id = c(1L),
-      static_table_id = c(101L),
-      static_table_name = c("calendar_dim"),
-      static_table_schema = c("static"),
-      static_table_table = c("calendar_dim"),
-      group_id = c(11L),
-      group_name = c("calendar"),
-      data_only = c(TRUE)
-    ))
-  }
-
-  if (grepl("process_dependency_scheduled", sql)) {
-    return(data.frame(
-      process_id = c(1L),
-      cron_min = c("0"),
-      cron_hour = c("6"),
-      cron_day = c("*"),
-      cron_month = c("*"),
-      cron_week_day = c("1-5"),
-      group_id = c(12L),
-      group_name = c("weekday trigger"),
-      data_only = c(FALSE)
-    ))
-  }
-
-  if (grepl("process_dependency_manual", sql)) {
-    return(data.frame(
-      process_id = integer(),
-      manual_dependency = character(),
-      group_id = integer(),
-      group_name = character(),
-      data_only = logical()
-    ))
-  }
-
-  stop("Unhandled SQL in mock: ", sql)
-}
-```
-
-```{r}
+#| eval: false
 library(hiproc)
 
-offline_process_view <- with_mocked_hiconnect_pg_get_query(mock_process_pg_get_query, {
-  list(
-    events = hiproc::event_summary(),
-    deps = hiproc::get_dependencies(
-      "build_dashboard",
-      recursive = TRUE,
-      con = structure(list(), class = "mock_con")
-    )
-  )
-})
+events <- hiproc::event_summary()
+events[, c("process_name", "last_status", "diagnostic")]
 
-offline_process_view$events[, c("process_name", "last_status", "diagnostic")]
-offline_process_view$deps$process[, c("name", "dependency_process_name", "depth")]
+deps <- hiproc::get_dependencies("build_dashboard", recursive = TRUE)
+deps$process[, c("name", "dependency_process_name", "depth")]
 ```
 
 ### Process thinking

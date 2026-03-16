@@ -30,25 +30,21 @@ It is the main LLM interface package for the ecosystem and supports:
 - The builder DSL is usually the better teaching surface because it keeps
   prompts, schemas, tools, logging, and async settings in one object.
 
-The live versions need API keys. The runnable book examples below swap in mock
-provider responses so you can still see the workflow offline.
+The OpenAI-based examples below run live when `OPENAI_API_KEY` is available in
+your environment. The only exception is the final `mutate_llm()` snippet, which
+is shown without execution because it intentionally fans out multiple model
+calls.
 
 ```{r}
 #| echo: false
-with_mocked_namespace_function <- function(package_name, function_name, mock_fn, expr) {
-  ns <- asNamespace(package_name)
-  old <- get(function_name, envir = ns)
-  unlockBinding(function_name, ns)
-  assign(function_name, mock_fn, envir = ns)
-  lockBinding(function_name, ns)
-  on.exit({
-    unlockBinding(function_name, ns)
-    assign(function_name, old, envir = ns)
-    lockBinding(function_name, ns)
-  }, add = TRUE)
-  force(expr)
-}
+openai_key_available <- nzchar(Sys.getenv("OPENAI_API_KEY"))
 ```
+
+::: {.callout-note}
+To render the live `higpt` examples, set `OPENAI_API_KEY` in your environment.
+`higpt` also supports `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` or
+`CLAUDE_API_KEY`, and `XAI_API_KEY` or `GROK_API_KEY`.
+:::
 
 ```{r}
 library(higpt)
@@ -113,20 +109,9 @@ quality_chat <- higpt::make_model("gpt-5-mini") |>
 higpt::preview(quality_chat)
 ```
 
-```{r}
-mock_builder_reply <- function(...) {
-  paste(
-    "- confirm the primary key is unique",
-    "- check order dates are populated and sensible",
-    "- compare order totals against expected ranges",
-    sep = "\n"
-  )
-}
-
-builder_result <- with_mocked_namespace_function("higpt", "continue_chat", mock_builder_reply, {
-  quality_chat |>
-    higpt::submit()
-})
+```{r, eval=openai_key_available}
+builder_result <- quality_chat |>
+  higpt::submit()
 
 higpt::collect_text(builder_result)
 ```
@@ -142,25 +127,20 @@ check_schema <- higpt::make_schema("quality_check") |>
   higpt::add_field("check_name", "string") |>
   higpt::add_field("why_it_matters", "string") |>
   higpt::finalize_schema()
+```
 
-schema_result <- with_mocked_namespace_function("higpt", "continue_chat", function(...) {
-  paste(
-    "```json",
-    "{\"check_name\":\"primary key uniqueness\",\"why_it_matters\":\"Duplicate order IDs break joins, aggregations, and downstream QA.\"}",
-    "```",
-    sep = "\n"
-  )
-}, {
-  higpt::make_model("gpt-5-mini") |>
-    higpt::add_user_message("Name one important validation for an orders table.") |>
-    higpt::set_schema(check_schema, multiple_rows = FALSE) |>
-    higpt::submit()
-})
+```{r, eval=openai_key_available}
+schema_result <- higpt::make_model("gpt-mini-latest") |>
+  higpt::add_user_message("Name one important validation for an orders table.") |>
+  higpt::set_schema(check_schema, multiple_rows = FALSE) |>
+  higpt::submit()
 
 schema_result |>
-  higpt::enforce_schema() |>
   higpt::collect_df()
 ```
+
+If a provider ignores native structured outputs, `enforce_schema()` is the
+fallback that cleans the text response into the requested shape.
 
 ### Tools with the builder
 
@@ -173,24 +153,15 @@ add_numbers <- higpt::make_tool("add_numbers", "Add two numbers together") |>
 handlers <- list(
   add_numbers = function(args) as.character(args$a + args$b)
 )
+```
 
-mock_tool_builder <- function(...) {
-  list(
-    content = "The answer is 42.",
-    response = list(
-      usage = list(input_tokens = 10, output_tokens = 5)
-    )
-  )
-}
-
-tool_result <- with_mocked_namespace_function("higpt", "chat_with_tools", mock_tool_builder, {
-  higpt::make_model("gpt-5-mini") |>
-    higpt::add_user_message("What is 12 + 30? Use the tool.") |>
-    higpt::add_tool(add_numbers) |>
-    higpt::set_tool_choice("auto") |>
-    higpt::set_tool_handlers(handlers) |>
-    higpt::submit()
-})
+```{r, eval=openai_key_available}
+tool_result <- higpt::make_model("gpt-mini-latest") |>
+  higpt::add_user_message("What is 12 + 30? Use the tool.") |>
+  higpt::add_tool(add_numbers) |>
+  higpt::set_tool_choice("auto") |>
+  higpt::set_tool_handlers(handlers) |>
+  higpt::submit()
 
 higpt::collect_text(tool_result)
 ```
@@ -235,18 +206,15 @@ driver_notes <- data.frame(
   metric = c("stockouts", "late deliveries", "returns"),
   stringsAsFactors = FALSE
 )
+```
 
-mock_rowwise_reply <- function(chat_messages, ...) {
-  paste("Analyst note:", chat_messages$content[[1]])
-}
-
-notes <- with_mocked_namespace_function("higpt", "continue_chat", mock_rowwise_reply, {
-  higpt::mutate_llm(
-    paste("Write one business interpretation for", driver_notes$metric),
-    model_name = "gpt-5-mini",
-    .progress = FALSE
-  )
-})
+```{r}
+#| eval: false
+notes <- higpt::mutate_llm(
+  paste("Write one business interpretation for", driver_notes$metric),
+  model_name = "gpt-mini-latest",
+  .progress = FALSE
+)
 
 data.frame(metric = driver_notes$metric, note = notes)
 ```

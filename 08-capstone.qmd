@@ -1,13 +1,13 @@
 ---
-title: "Capstone Exercises"
+title: "Exercises"
 ---
 
 # Pull the pieces together
 
-These capstone exercises are meant to feel more like real Isazi work and less
-like isolated package demos.
+These exercises are meant to feel more like real Isazi work and less like
+isolated package demos.
 
-## Capstone 1: first-contact data audit
+## Exercise 1: first-contact data audit
 
 Goal: inspect an unfamiliar table and decide whether it is trustworthy enough
 for downstream use.
@@ -32,7 +32,7 @@ Suggested stack:
    - whether the table is fit for modeling
 5. Add `hilog::info()` messages so the audit leaves a readable execution trace.
 
-## Capstone 2: build a mini knowledge base
+## Exercise 2: build a mini knowledge base
 
 Goal: move from "I explored these two tables once" to "the team can reuse what
 I learned".
@@ -51,7 +51,7 @@ Suggested stack:
 4. Save the result mentally or on disk as if it were the start of a real KB.
 5. Write a short note explaining what a new joiner should know about these tables.
 
-## Capstone 3: platform incident walkthrough
+## Exercise 3: platform incident walkthrough
 
 Goal: reason about a surprising downstream output.
 
@@ -74,7 +74,7 @@ Work through:
 3. which table would you validate first?
 4. what quick `himunge` checks would you run after pulling the data?
 
-## Capstone 4: AI-assisted exploration with guardrails
+## Exercise 4: AI-assisted exploration with guardrails
 
 Goal: use the AI packages without surrendering judgment.
 
@@ -91,7 +91,7 @@ Suggested stack:
 3. Compare the human view, the heuristic view, and the LLM view.
 4. Decide what an agentic workflow should automate and what should stay manual.
 
-## Capstone 5: specialist deep dive
+## Exercise 5: specialist deep dive
 
 Choose one:
 

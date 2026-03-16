@@ -73,6 +73,32 @@ devtools::install_gitlab("isazi/hudson-packages/hisched")
 Other optional packages exist as well, especially for supply-chain work, but
 you do not need all of them on day one.
 
+## Optional: configure AI provider keys
+
+If you want the `higpt` examples in this book to run live, set the provider key
+you plan to use in `~/.Renviron`.
+
+For the OpenAI-based examples in this book, the main requirement is:
+
+```text
+OPENAI_API_KEY=sk-...
+```
+
+Other providers supported by `higpt` use:
+
+```text
+GEMINI_API_KEY=...
+ANTHROPIC_API_KEY=...
+# or
+CLAUDE_API_KEY=...
+XAI_API_KEY=...
+# or
+GROK_API_KEY=...
+```
+
+Restart R after saving so the environment variables are visible in your
+session.
+
 ## A quick installation check
 
 Once packages are installed, run a quick sanity check:
