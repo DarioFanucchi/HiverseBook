@@ -44,7 +44,7 @@
     "href": "index.html#packages-covered",
     "title": "Getting Started with the Hiverse",
     "section": "1.4 Packages covered",
-    "text": "1.4 Packages covered\nDeep-dive chapters:\n\nhiconnect\nhimunge\nhidate\nhiproc\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint\nhisched\n\nSupporting package catalog:\n\nhiplot\nhilog\nhifile\nhidoc\nhidash\nhimatch\nhigest\nhidalgo\nhipilot",
+    "text": "1.4 Packages covered\nDeep-dive chapters:\n\nhiconnect\nhimunge\nhidate\nhilog\nhiproc\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint\nhisched\n\nSupporting package catalog:\n\nhiplot\nhilog\nhifile\nhidoc\nhidash\nhimatch\nhigest\nhidalgo\nhipilot",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
     ]
@@ -54,7 +54,7 @@
     "href": "index.html#suggested-study-tracks",
     "title": "Getting Started with the Hiverse",
     "section": "1.5 Suggested study tracks",
-    "text": "1.5 Suggested study tracks\n\n\n\n\n\n\n\n\nTrack\nPackages\nWhy start here?\n\n\n\n\nCore data scientist track\nhimunge, hiconnect, hidate, hiproc, himodel\nThese packages are closest to day-to-day Hudson analysis and platform work.\n\n\nAI-era extension track\nhigpt, higrate, hidrogen, hipilot\nThese packages add leverage once you already understand the underlying data and workflows.\n\n\nSpecialist track\nhipoint, hisched\nHigh-value in the right domain, but not required for every new joiner immediately.\n\n\nSupporting tools track\nhiplot, hilog, hifile, hidoc, hidash, himatch, higest, hidalgo\nUseful context and workflow support, but not the best first investment for most people.",
+    "text": "1.5 Suggested study tracks\n\n\n\n\n\n\n\n\nTrack\nPackages\nWhy start here?\n\n\n\n\nCore data scientist track\nhimunge, hiconnect, hidate, hilog, hiproc, himodel\nThese packages are closest to day-to-day Hudson analysis and platform work.\n\n\nAI-era extension track\nhigpt, higrate, hidrogen, hipilot\nThese packages add leverage once you already understand the underlying data and workflows.\n\n\nSpecialist track\nhipoint, hisched\nHigh-value in the right domain, but not required for every new joiner immediately.\n\n\nSupporting tools track\nhiplot, hifile, hidoc, hidash, himatch, higest, hidalgo\nUseful context and workflow support, but not the best first investment for most people.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
     ]
@@ -104,7 +104,7 @@
     "href": "01-setup.html#step-3-install-the-common-package-set",
     "title": "2  Setup and Installation",
     "section": "3.3 Step 3: install the common package set",
-    "text": "3.3 Step 3: install the common package set\nhiverse can install the common packages for you:\n\nhiverse::install_hudson_packages(\"common\")\n\nThat common set currently includes the main packages new employees are most likely to use first, such as hiconnect, himunge, hiproc, hidate, higpt, higrate, hidrogen, and himodel.",
+    "text": "3.3 Step 3: install the common package set\nhiverse can install the common packages for you:\n\nhiverse::install_hudson_packages(\"common\")\n\nThat common set currently includes the main packages new employees are most likely to use first, such as hiconnect, himunge, hiproc, hidate, hilog, higpt, higrate, hidrogen, and himodel.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
     ]
@@ -124,7 +124,7 @@
     "href": "01-setup.html#a-quick-installation-check",
     "title": "2  Setup and Installation",
     "section": "3.5 A quick installation check",
-    "text": "3.5 A quick installation check\nOnce packages are installed, run a quick sanity check:\n\nrequired_pkgs &lt;- c(\n  \"hiverse\", \"himunge\", \"hiconnect\", \"hidate\", \"hiproc\",\n  \"higpt\", \"higrate\", \"hidrogen\", \"himodel\"\n)\n\ndata.frame(\n  package = required_pkgs,\n  installed = vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)\n)",
+    "text": "3.5 A quick installation check\nOnce packages are installed, run a quick sanity check:\n\nrequired_pkgs &lt;- c(\n  \"hiverse\", \"himunge\", \"hiconnect\", \"hidate\", \"hilog\", \"hiproc\",\n  \"higpt\", \"higrate\", \"hidrogen\", \"himodel\"\n)\n\ndata.frame(\n  package = required_pkgs,\n  installed = vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)\n)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
     ]
@@ -134,7 +134,7 @@
     "href": "01-setup.html#recommended-learning-order",
     "title": "2  Setup and Installation",
     "section": "3.6 Recommended learning order",
-    "text": "3.6 Recommended learning order\nIf you are a new joiner and want the shortest path to competence:\n\nhimunge\nhiconnect\nhidate\nhiproc if you touch processes\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint or hisched if your project calls for them",
+    "text": "3.6 Recommended learning order\nIf you are a new joiner and want the shortest path to competence:\n\nhimunge\nhiconnect\nhidate\nhilog\nhiproc if you touch processes\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint or hisched if your project calls for them",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
     ]
@@ -174,7 +174,7 @@
     "href": "02-core-data.html",
     "title": "3  Core Data Packages",
     "section": "",
-    "text": "4 The packages you will use most often\nFor most data scientists at Isazi, the center of gravity is:\nIf you become fluent with these three, the rest of the hiverse becomes easier.",
+    "text": "4 The packages you will use most often\nFor most data scientists at Isazi, the center of gravity is:\nIf you become fluent with these four, the rest of the hiverse becomes easier.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
     ]
@@ -200,11 +200,21 @@
     ]
   },
   {
+    "objectID": "02-core-data.html#hilog-log-early-log-clearly",
+    "href": "02-core-data.html#hilog-log-early-log-clearly",
+    "title": "3  Core Data Packages",
+    "section": "4.3 hilog: log early, log clearly",
+    "text": "4.3 hilog: log early, log clearly\nhilog is small, but it is worth learning early because it encourages a good habit: code should say what it is doing while it runs.\nThat matters in:\n\nlong-running scripts\ndata-quality audits\npackage code\nHudson processes\ndebugging interactive work that later becomes production code\n\n\n4.3.1 The core idea\nThe logging functions support sprintf-style interpolation directly through their ... arguments, so you can write concise, structured messages without building strings manually.\n\nlibrary(hilog)\n\nhilog::set_level_info()\n\nhilog::info(\"Loaded %i rows from %s\", 1250, \"orders_extract.csv\")\nhilog::info(\"Coverage after cleaning: %.1f%%\", 97.4)\n\nThat style is worth copying. It keeps the message template stable and pushes the changing values into arguments.\nA typical emitted line looks like:\n[2026-03-16 10:15:00 audit_orders] INFO: Starting order audit on 6 rows and 5 columns\nThe timestamp and calling context come for free, which is why this is more useful than scattering print() calls through your code.\n\n\n4.3.2 A more realistic example\n\naudit_orders &lt;- function(df) {\n  hilog::info(\"Starting order audit on %i rows and %i columns\", nrow(df), ncol(df))\n\n  key_sets &lt;- himunge::find_primary_keys(df)\n  hilog::info(\"Found %i candidate key sets\", length(key_sets))\n\n  if (length(key_sets) &gt; 0) {\n    hilog::info(\"Smallest candidate key: %s\", paste(key_sets[[1]], collapse = \", \"))\n  } else {\n    hilog::error(\"No primary key candidate found for current dataset\")\n  }\n}\n\nIn practice, that means you do not need to guess where a script got to before it failed or started behaving strangely.\n\n\n4.3.3 Debug level\n\nhilog::set_level_debug()\nhilog::debug(\"Duplicate order_id count: %i\", sum(duplicated(orders_dirty$order_id)))\n\nUse info() for progress, debug() for extra detail, and error() for messages that should always be visible.\n\n\n4.3.4 Try it\n\nAdd hilog::info() calls to one of your own analysis scripts.\nLog:\n\nhow many rows were loaded\nhow many columns were selected\nwhat key you think the table has\n\nRewrite one message using %i, %s, or %.2f formatting instead of paste().\n\n\n\n4.3.5 Stretch\nTake the earlier himunge toy exercise and add logging at each step:\n\nraw row count\ncleaned row count\nnumber of candidate key sets found\nwhether violations were detected\n\nThen imagine that script runs overnight. Which log lines would help you most the next morning?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
     "objectID": "02-core-data.html#hidate-small-package-very-high-practical-value",
     "href": "02-core-data.html#hidate-small-package-very-high-practical-value",
     "title": "3  Core Data Packages",
-    "section": "4.3 hidate: small package, very high practical value",
-    "text": "4.3 hidate: small package, very high practical value\nMany Isazi projects are date-heavy. Forecast cutoffs, planning windows, working days, weekly rollups, and month boundaries show up constantly.\n\n4.3.1 Simple example\n\nlibrary(hidate)\n\ndate &lt;- as.Date(\"2026-03-16\")\n\nhidate::start_of_month(date)\nhidate::end_of_month(date)\nhidate::start_of_week(date)\nhidate::end_of_week(date)\nhidate::diff_weekdays(c(as.Date(\"2026-03-16\"), as.Date(\"2026-03-31\")))\n\n\n\n4.3.2 A visual: working-day accumulation\n\nmarch_days &lt;- seq(as.Date(\"2026-03-01\"), as.Date(\"2026-03-31\"), by = \"day\")\nweekday_flag &lt;- weekdays(march_days) %in% c(\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\")\ncum_weekdays &lt;- cumsum(weekday_flag)\n\nplot(\n  march_days,\n  cum_weekdays,\n  type = \"l\",\n  lwd = 3,\n  col = \"#0b6e69\",\n  xlab = \"Date\",\n  ylab = \"Cumulative weekdays\",\n  main = \"Why date helpers matter in planning work\"\n)\ngrid()\n\n\n\n\n\n\n\n\n\n\n4.3.3 Try it\n\nPick a date relevant to your project.\nCompute its month start, month end, week start, and week end.\nWork out how many weekdays remain in that month.\n\n\n\n4.3.4 Stretch\nWrite a function called planning_window() that returns:\n\nthe current week start\nthe current month end\nthe number of weekdays between them\n\nThen compare your result with hidate::diff_weekdays().",
+    "section": "4.4 hidate: small package, very high practical value",
+    "text": "4.4 hidate: small package, very high practical value\nMany Isazi projects are date-heavy. Forecast cutoffs, planning windows, working days, weekly rollups, and month boundaries show up constantly.\n\n4.4.1 Simple example\n\nlibrary(hidate)\n\ndate &lt;- as.Date(\"2026-03-16\")\n\nhidate::start_of_month(date)\nhidate::end_of_month(date)\nhidate::start_of_week(date)\nhidate::end_of_week(date)\nhidate::diff_weekdays(c(as.Date(\"2026-03-16\"), as.Date(\"2026-03-31\")))\n\n\n\n4.4.2 A visual: working-day accumulation\n\nmarch_days &lt;- seq(as.Date(\"2026-03-01\"), as.Date(\"2026-03-31\"), by = \"day\")\nweekday_flag &lt;- weekdays(march_days) %in% c(\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\")\ncum_weekdays &lt;- cumsum(weekday_flag)\n\nplot(\n  march_days,\n  cum_weekdays,\n  type = \"l\",\n  lwd = 3,\n  col = \"#0b6e69\",\n  xlab = \"Date\",\n  ylab = \"Cumulative weekdays\",\n  main = \"Why date helpers matter in planning work\"\n)\ngrid()\n\n\n\n\n\n\n\n\n\n\n4.4.3 Try it\n\nPick a date relevant to your project.\nCompute its month start, month end, week start, and week end.\nWork out how many weekdays remain in that month.\n\n\n\n4.4.4 Stretch\nWrite a function called planning_window() that returns:\n\nthe current week start\nthe current month end\nthe number of weekdays between them\n\nThen compare your result with hidate::diff_weekdays().",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
     ]
@@ -213,8 +223,8 @@
     "objectID": "02-core-data.html#think",
     "href": "02-core-data.html#think",
     "title": "3  Core Data Packages",
-    "section": "4.4 Think",
-    "text": "4.4 Think\nWhich is riskier on a real project:\n\ngetting the model wrong\nor getting the date logic wrong before the model is even run?",
+    "section": "4.5 Think",
+    "text": "4.5 Think\nWhich is riskier on a real project:\n\ngetting the model wrong\nor getting the date logic wrong before the model is even run?",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
     ]
@@ -474,7 +484,7 @@
     "href": "07-supporting-packages.html#quick-catalog",
     "title": "8  Supporting Packages at a Glance",
     "section": "9.1 Quick catalog",
-    "text": "9.1 Quick catalog\n\n\n\n\n\n\n\n\n\nPackage\nMain use\nWho should care first?\nCurrent role\n\n\n\n\nhiplot\nHudson plotting theme and palettes\nAnalysts making internal plots\nLightweight but handy\n\n\nhilog\nSimple logging\nProcess/package developers\nSmall infrastructure helper\n\n\nhifile\nFile import/export helpers\nIngestion and reporting work\nUseful support package\n\n\nhidoc\nR Markdown and data-dictionary helpers\nReporting-heavy work\nUseful, but rougher docs\n\n\nhidash\nDashboard utilities\nShiny dashboard builders\nNiche but useful\n\n\nhimatch\nString matching and standardisation\nData quality / matching work\nGood utility package\n\n\nhigest\nStructured ingestion pipelines\nProcess authors\nPlatform-oriented\n\n\nhidalgo\nGeneral algorithms/data structures\nPackage developers, niche use\nOlder and smaller\n\n\nhipilot\nRStudio LLM add-ins\nPeople coding interactively in RStudio\nProductivity layer",
+    "text": "9.1 Quick catalog\n\n\n\n\n\n\n\n\n\nPackage\nMain use\nWho should care first?\nCurrent role\n\n\n\n\nhiplot\nHudson plotting theme and palettes\nAnalysts making internal plots\nLightweight but handy\n\n\nhilog\nSimple logging\nEveryone writing reusable analysis, scripts, or processes\nImportant early-use helper; see the core chapter\n\n\nhifile\nFile import/export helpers\nIngestion and reporting work\nUseful support package\n\n\nhidoc\nR Markdown and data-dictionary helpers\nReporting-heavy work\nUseful, but rougher docs\n\n\nhidash\nDashboard utilities\nShiny dashboard builders\nNiche but useful\n\n\nhimatch\nString matching and standardisation\nData quality / matching work\nGood utility package\n\n\nhigest\nStructured ingestion pipelines\nProcess authors\nPlatform-oriented\n\n\nhidalgo\nGeneral algorithms/data structures\nPackage developers, niche use\nOlder and smaller\n\n\nhipilot\nRStudio LLM add-ins\nPeople coding interactively in RStudio\nProductivity layer",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
     ]
@@ -484,7 +494,7 @@
     "href": "07-supporting-packages.html#a-few-package-heuristics",
     "title": "8  Supporting Packages at a Glance",
     "section": "9.2 A few package heuristics",
-    "text": "9.2 A few package heuristics\n\n9.2.1 Reach for hiplot when:\n\nthe plot is internally useful but visually inconsistent\nyou want an Isazi/Hudson house style quickly\n\n\n\n9.2.2 Reach for hilog when:\n\nyou are writing a package or process that needs explicit logs\nyou want debug/info/error behavior without inventing your own logger\n\n\n\n9.2.3 Reach for himatch when:\n\nentity names are messy\nyou need standardisation before joining or grouping\nstakeholders keep saying “these should match, but they do not”\n\n\n\n9.2.4 Reach for hidoc when:\n\nyou need data dictionaries\nyou are building R Markdown outputs for others\n\n\n\n9.2.5 Reach for hipilot when:\n\nyou want faster drafting inside RStudio\nyou already know what “good” code should look like\n\nDo not reach for hipilot when you need actual system understanding. Learn the packages first.",
+    "text": "9.2 A few package heuristics\n\n9.2.1 Reach for hiplot when:\n\nthe plot is internally useful but visually inconsistent\nyou want an Isazi/Hudson house style quickly\n\n\n\n9.2.2 Reach for hilog when:\n\nyou want your script to explain what it is doing while it runs\nyou are writing a package or process that needs explicit logs\nyou want debug/info/error behavior without inventing your own logger\n\n\n\n9.2.3 Reach for himatch when:\n\nentity names are messy\nyou need standardisation before joining or grouping\nstakeholders keep saying “these should match, but they do not”\n\n\n\n9.2.4 Reach for hidoc when:\n\nyou need data dictionaries\nyou are building R Markdown outputs for others\n\n\n\n9.2.5 Reach for hipilot when:\n\nyou want faster drafting inside RStudio\nyou already know what “good” code should look like\n\nDo not reach for hipilot when you need actual system understanding. Learn the packages first.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
     ]
@@ -524,7 +534,7 @@
     "href": "08-capstone.html#capstone-1-first-contact-data-audit",
     "title": "9  Capstone Exercises",
     "section": "10.1 Capstone 1: first-contact data audit",
-    "text": "10.1 Capstone 1: first-contact data audit\nGoal: inspect an unfamiliar table and decide whether it is trustworthy enough for downstream use.\nSuggested stack:\n\nhiconnect\nhimunge\nhidate if dates are involved\n\n\n10.1.1 Task\n\nRead a table from Hudson, or simulate one locally.\nPropose one or more candidate keys with himunge::find_primary_keys().\nUse himunge::find_indices_violating_key() to identify suspicious rows.\nWrite a one-page audit note with:\n\ncandidate key\nkey violations\nmissing-value concerns\ndate issues\nwhether the table is fit for modeling",
+    "text": "10.1 Capstone 1: first-contact data audit\nGoal: inspect an unfamiliar table and decide whether it is trustworthy enough for downstream use.\nSuggested stack:\n\nhiconnect\nhimunge\nhilog\nhidate if dates are involved\n\n\n10.1.1 Task\n\nRead a table from Hudson, or simulate one locally.\nPropose one or more candidate keys with himunge::find_primary_keys().\nUse himunge::find_indices_violating_key() to identify suspicious rows.\nWrite a one-page audit note with:\n\ncandidate key\nkey violations\nmissing-value concerns\ndate issues\nwhether the table is fit for modeling\n\nAdd hilog::info() messages so the audit leaves a readable execution trace.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
     ]

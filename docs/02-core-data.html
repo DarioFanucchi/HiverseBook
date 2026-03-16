@@ -137,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Getting Started with the Hiverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/DarioFanucchi/HiverseBook" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Getting-Started-with-the-Hiverse.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -227,17 +231,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#try-it-1" id="toc-try-it-1" class="nav-link" data-scroll-target="#try-it-1"><span class="header-section-number">4.2.3</span> Try it</a></li>
   <li><a href="#stretch-1" id="toc-stretch-1" class="nav-link" data-scroll-target="#stretch-1"><span class="header-section-number">4.2.4</span> Stretch</a></li>
   </ul></li>
-  <li><a href="#hidate-small-package-very-high-practical-value" id="toc-hidate-small-package-very-high-practical-value" class="nav-link" data-scroll-target="#hidate-small-package-very-high-practical-value"><span class="header-section-number">4.3</span> <code>hidate</code>: small package, very high practical value</a>
+  <li><a href="#hilog-log-early-log-clearly" id="toc-hilog-log-early-log-clearly" class="nav-link" data-scroll-target="#hilog-log-early-log-clearly"><span class="header-section-number">4.3</span> <code>hilog</code>: log early, log clearly</a>
   <ul class="collapse">
-  <li><a href="#simple-example" id="toc-simple-example" class="nav-link" data-scroll-target="#simple-example"><span class="header-section-number">4.3.1</span> Simple example</a></li>
-  <li><a href="#a-visual-working-day-accumulation" id="toc-a-visual-working-day-accumulation" class="nav-link" data-scroll-target="#a-visual-working-day-accumulation"><span class="header-section-number">4.3.2</span> A visual: working-day accumulation</a></li>
-  <li><a href="#try-it-2" id="toc-try-it-2" class="nav-link" data-scroll-target="#try-it-2"><span class="header-section-number">4.3.3</span> Try it</a></li>
-  <li><a href="#stretch-2" id="toc-stretch-2" class="nav-link" data-scroll-target="#stretch-2"><span class="header-section-number">4.3.4</span> Stretch</a></li>
+  <li><a href="#the-core-idea" id="toc-the-core-idea" class="nav-link" data-scroll-target="#the-core-idea"><span class="header-section-number">4.3.1</span> The core idea</a></li>
+  <li><a href="#a-more-realistic-example" id="toc-a-more-realistic-example" class="nav-link" data-scroll-target="#a-more-realistic-example"><span class="header-section-number">4.3.2</span> A more realistic example</a></li>
+  <li><a href="#debug-level" id="toc-debug-level" class="nav-link" data-scroll-target="#debug-level"><span class="header-section-number">4.3.3</span> Debug level</a></li>
+  <li><a href="#try-it-2" id="toc-try-it-2" class="nav-link" data-scroll-target="#try-it-2"><span class="header-section-number">4.3.4</span> Try it</a></li>
+  <li><a href="#stretch-2" id="toc-stretch-2" class="nav-link" data-scroll-target="#stretch-2"><span class="header-section-number">4.3.5</span> Stretch</a></li>
   </ul></li>
-  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">4.4</span> Think</a></li>
+  <li><a href="#hidate-small-package-very-high-practical-value" id="toc-hidate-small-package-very-high-practical-value" class="nav-link" data-scroll-target="#hidate-small-package-very-high-practical-value"><span class="header-section-number">4.4</span> <code>hidate</code>: small package, very high practical value</a>
+  <ul class="collapse">
+  <li><a href="#simple-example" id="toc-simple-example" class="nav-link" data-scroll-target="#simple-example"><span class="header-section-number">4.4.1</span> Simple example</a></li>
+  <li><a href="#a-visual-working-day-accumulation" id="toc-a-visual-working-day-accumulation" class="nav-link" data-scroll-target="#a-visual-working-day-accumulation"><span class="header-section-number">4.4.2</span> A visual: working-day accumulation</a></li>
+  <li><a href="#try-it-3" id="toc-try-it-3" class="nav-link" data-scroll-target="#try-it-3"><span class="header-section-number">4.4.3</span> Try it</a></li>
+  <li><a href="#stretch-3" id="toc-stretch-3" class="nav-link" data-scroll-target="#stretch-3"><span class="header-section-number">4.4.4</span> Stretch</a></li>
+  </ul></li>
+  <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">4.5</span> Think</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/02-core-data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -268,8 +280,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>himunge</code> for understanding and cleaning data</li>
 <li><code>hiconnect</code> for getting data in and out of Hudson databases</li>
 <li><code>hidate</code> for calendar logic that appears in real business work</li>
+<li><code>hilog</code> for making scripts and processes observable from the start</li>
 </ul>
-<p>If you become fluent with these three, the rest of the hiverse becomes easier.</p>
+<p>If you become fluent with these four, the rest of the hiverse becomes easier.</p>
 <section id="himunge-your-first-stop-for-unfamiliar-data" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="himunge-your-first-stop-for-unfamiliar-data"><span class="header-section-number">4.1</span> <code>himunge</code>: your first stop for unfamiliar data</h2>
 <p><code>himunge</code> is the strongest all-round package in the ecosystem. It is useful because it helps with the actual first questions people ask about a dataset:</p>
@@ -431,60 +444,138 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="hidate-small-package-very-high-practical-value" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="hidate-small-package-very-high-practical-value"><span class="header-section-number">4.3</span> <code>hidate</code>: small package, very high practical value</h2>
-<p>Many Isazi projects are date-heavy. Forecast cutoffs, planning windows, working days, weekly rollups, and month boundaries show up constantly.</p>
-<section id="simple-example" class="level3" data-number="4.3.1">
-<h3 data-number="4.3.1" class="anchored" data-anchor-id="simple-example"><span class="header-section-number">4.3.1</span> Simple example</h3>
+<section id="hilog-log-early-log-clearly" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="hilog-log-early-log-clearly"><span class="header-section-number">4.3</span> <code>hilog</code>: log early, log clearly</h2>
+<p><code>hilog</code> is small, but it is worth learning early because it encourages a good habit: code should say what it is doing while it runs.</p>
+<p>That matters in:</p>
+<ul>
+<li>long-running scripts</li>
+<li>data-quality audits</li>
+<li>package code</li>
+<li>Hudson processes</li>
+<li>debugging interactive work that later becomes production code</li>
+</ul>
+<section id="the-core-idea" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="the-core-idea"><span class="header-section-number">4.3.1</span> The core idea</h3>
+<p>The logging functions support <code>sprintf</code>-style interpolation directly through their <code>...</code> arguments, so you can write concise, structured messages without building strings manually.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hidate)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hilog)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2026-03-16"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hilog<span class="sc">::</span><span class="fu">set_level_info</span>()</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">start_of_month</span>(date)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">end_of_month</span>(date)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">start_of_week</span>(date)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">end_of_week</span>(date)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">diff_weekdays</span>(<span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">"2026-03-16"</span>), <span class="fu">as.Date</span>(<span class="st">"2026-03-31"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>hilog<span class="sc">::</span><span class="fu">info</span>(<span class="st">"Loaded %i rows from %s"</span>, <span class="dv">1250</span>, <span class="st">"orders_extract.csv"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>hilog<span class="sc">::</span><span class="fu">info</span>(<span class="st">"Coverage after cleaning: %.1f%%"</span>, <span class="fl">97.4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>That style is worth copying. It keeps the message template stable and pushes the changing values into arguments.</p>
+<p>A typical emitted line looks like:</p>
+<pre class="text"><code>[2026-03-16 10:15:00 audit_orders] INFO: Starting order audit on 6 rows and 5 columns</code></pre>
+<p>The timestamp and calling context come for free, which is why this is more useful than scattering <code>print()</code> calls through your code.</p>
+</section>
+<section id="a-more-realistic-example" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="a-more-realistic-example"><span class="header-section-number">4.3.2</span> A more realistic example</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>audit_orders <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  hilog<span class="sc">::</span><span class="fu">info</span>(<span class="st">"Starting order audit on %i rows and %i columns"</span>, <span class="fu">nrow</span>(df), <span class="fu">ncol</span>(df))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  key_sets <span class="ot">&lt;-</span> himunge<span class="sc">::</span><span class="fu">find_primary_keys</span>(df)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  hilog<span class="sc">::</span><span class="fu">info</span>(<span class="st">"Found %i candidate key sets"</span>, <span class="fu">length</span>(key_sets))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(key_sets) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    hilog<span class="sc">::</span><span class="fu">info</span>(<span class="st">"Smallest candidate key: %s"</span>, <span class="fu">paste</span>(key_sets[[<span class="dv">1</span>]], <span class="at">collapse =</span> <span class="st">", "</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    hilog<span class="sc">::</span><span class="fu">error</span>(<span class="st">"No primary key candidate found for current dataset"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In practice, that means you do not need to guess where a script got to before it failed or started behaving strangely.</p>
+</section>
+<section id="debug-level" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="debug-level"><span class="header-section-number">4.3.3</span> Debug level</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hilog<span class="sc">::</span><span class="fu">set_level_debug</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>hilog<span class="sc">::</span><span class="fu">debug</span>(<span class="st">"Duplicate order_id count: %i"</span>, <span class="fu">sum</span>(<span class="fu">duplicated</span>(orders_dirty<span class="sc">$</span>order_id)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use <code>info()</code> for progress, <code>debug()</code> for extra detail, and <code>error()</code> for messages that should always be visible.</p>
+</section>
+<section id="try-it-2" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="try-it-2"><span class="header-section-number">4.3.4</span> Try it</h3>
+<ol type="1">
+<li>Add <code>hilog::info()</code> calls to one of your own analysis scripts.</li>
+<li>Log:
+<ul>
+<li>how many rows were loaded</li>
+<li>how many columns were selected</li>
+<li>what key you think the table has</li>
+</ul></li>
+<li>Rewrite one message using <code>%i</code>, <code>%s</code>, or <code>%.2f</code> formatting instead of <code>paste()</code>.</li>
+</ol>
+</section>
+<section id="stretch-2" class="level3" data-number="4.3.5">
+<h3 data-number="4.3.5" class="anchored" data-anchor-id="stretch-2"><span class="header-section-number">4.3.5</span> Stretch</h3>
+<p>Take the earlier <code>himunge</code> toy exercise and add logging at each step:</p>
+<ol type="1">
+<li>raw row count</li>
+<li>cleaned row count</li>
+<li>number of candidate key sets found</li>
+<li>whether violations were detected</li>
+</ol>
+<p>Then imagine that script runs overnight. Which log lines would help you most the next morning?</p>
+</section>
+</section>
+<section id="hidate-small-package-very-high-practical-value" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="hidate-small-package-very-high-practical-value"><span class="header-section-number">4.4</span> <code>hidate</code>: small package, very high practical value</h2>
+<p>Many Isazi projects are date-heavy. Forecast cutoffs, planning windows, working days, weekly rollups, and month boundaries show up constantly.</p>
+<section id="simple-example" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="simple-example"><span class="header-section-number">4.4.1</span> Simple example</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hidate)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2026-03-16"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">start_of_month</span>(date)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">end_of_month</span>(date)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">start_of_week</span>(date)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">end_of_week</span>(date)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>hidate<span class="sc">::</span><span class="fu">diff_weekdays</span>(<span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">"2026-03-16"</span>), <span class="fu">as.Date</span>(<span class="st">"2026-03-31"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="a-visual-working-day-accumulation" class="level3" data-number="4.3.2">
-<h3 data-number="4.3.2" class="anchored" data-anchor-id="a-visual-working-day-accumulation"><span class="header-section-number">4.3.2</span> A visual: working-day accumulation</h3>
+<section id="a-visual-working-day-accumulation" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="a-visual-working-day-accumulation"><span class="header-section-number">4.4.2</span> A visual: working-day accumulation</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>march_days <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2026-03-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2026-03-31"</span>), <span class="at">by =</span> <span class="st">"day"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>weekday_flag <span class="ot">&lt;-</span> <span class="fu">weekdays</span>(march_days) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cum_weekdays <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(weekday_flag)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  march_days,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  cum_weekdays,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"l"</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#0b6e69"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Date"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Cumulative weekdays"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Why date helpers matter in planning work"</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>march_days <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"2026-03-01"</span>), <span class="fu">as.Date</span>(<span class="st">"2026-03-31"</span>), <span class="at">by =</span> <span class="st">"day"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>weekday_flag <span class="ot">&lt;-</span> <span class="fu">weekdays</span>(march_days) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>cum_weekdays <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(weekday_flag)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  march_days,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  cum_weekdays,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"l"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"#0b6e69"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Date"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Cumulative weekdays"</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Why date helpers matter in planning work"</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="02-core-data_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="02-core-data_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="try-it-2" class="level3" data-number="4.3.3">
-<h3 data-number="4.3.3" class="anchored" data-anchor-id="try-it-2"><span class="header-section-number">4.3.3</span> Try it</h3>
+<section id="try-it-3" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="try-it-3"><span class="header-section-number">4.4.3</span> Try it</h3>
 <ol type="1">
 <li>Pick a date relevant to your project.</li>
 <li>Compute its month start, month end, week start, and week end.</li>
 <li>Work out how many weekdays remain in that month.</li>
 </ol>
 </section>
-<section id="stretch-2" class="level3" data-number="4.3.4">
-<h3 data-number="4.3.4" class="anchored" data-anchor-id="stretch-2"><span class="header-section-number">4.3.4</span> Stretch</h3>
+<section id="stretch-3" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="stretch-3"><span class="header-section-number">4.4.4</span> Stretch</h3>
 <p>Write a function called <code>planning_window()</code> that returns:</p>
 <ul>
 <li>the current week start</li>
@@ -494,8 +585,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Then compare your result with <code>hidate::diff_weekdays()</code>.</p>
 </section>
 </section>
-<section id="think" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="think"><span class="header-section-number">4.4</span> Think</h2>
+<section id="think" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="think"><span class="header-section-number">4.5</span> Think</h2>
 <p>Which is riskier on a real project:</p>
 <ul>
 <li>getting the model wrong</li>
@@ -924,4 +1015,4 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/02-core-data.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>

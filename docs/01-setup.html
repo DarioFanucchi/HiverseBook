@@ -137,6 +137,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Getting Started with the Hiverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/DarioFanucchi/HiverseBook" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Getting-Started-with-the-Hiverse.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -223,7 +227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">3.9</span> Think</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/01-setup.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -295,7 +299,7 @@ Warning
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hiverse<span class="sc">::</span><span class="fu">install_hudson_packages</span>(<span class="st">"common"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>That common set currently includes the main packages new employees are most likely to use first, such as <code>hiconnect</code>, <code>himunge</code>, <code>hiproc</code>, <code>hidate</code>, <code>higpt</code>, <code>higrate</code>, <code>hidrogen</code>, and <code>himodel</code>.</p>
+<p>That common set currently includes the main packages new employees are most likely to use first, such as <code>hiconnect</code>, <code>himunge</code>, <code>hiproc</code>, <code>hidate</code>, <code>hilog</code>, <code>higpt</code>, <code>higrate</code>, <code>hidrogen</code>, and <code>himodel</code>.</p>
 </section>
 <section id="step-4-install-optional-packages-only-when-needed" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="step-4-install-optional-packages-only-when-needed"><span class="header-section-number">3.4</span> Step 4: install optional packages only when needed</h2>
@@ -311,7 +315,7 @@ Warning
 <p>Once packages are installed, run a quick sanity check:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>required_pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hiverse"</span>, <span class="st">"himunge"</span>, <span class="st">"hiconnect"</span>, <span class="st">"hidate"</span>, <span class="st">"hiproc"</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hiverse"</span>, <span class="st">"himunge"</span>, <span class="st">"hiconnect"</span>, <span class="st">"hidate"</span>, <span class="st">"hilog"</span>, <span class="st">"hiproc"</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"higpt"</span>, <span class="st">"higrate"</span>, <span class="st">"hidrogen"</span>, <span class="st">"himodel"</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -328,6 +332,7 @@ Warning
 <li><code>himunge</code></li>
 <li><code>hiconnect</code></li>
 <li><code>hidate</code></li>
+<li><code>hilog</code></li>
 <li><code>hiproc</code> if you touch processes</li>
 <li><code>higpt</code></li>
 <li><code>higrate</code></li>
@@ -781,4 +786,4 @@ Warning
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/01-setup.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>

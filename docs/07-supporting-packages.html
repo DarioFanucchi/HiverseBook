@@ -102,6 +102,10 @@ ul.task-list li input[type="checkbox"] {
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Getting Started with the Hiverse</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/DarioFanucchi/HiverseBook" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Getting-Started-with-the-Hiverse.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -190,7 +194,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#think" id="toc-think" class="nav-link" data-scroll-target="#think"><span class="header-section-number">9.4</span> Think</a></li>
   </ul></li>
   </ul>
-</nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/07-supporting-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -244,8 +248,8 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td><code>hilog</code></td>
 <td>Simple logging</td>
-<td>Process/package developers</td>
-<td>Small infrastructure helper</td>
+<td>Everyone writing reusable analysis, scripts, or processes</td>
+<td>Important early-use helper; see the core chapter</td>
 </tr>
 <tr class="odd">
 <td><code>hifile</code></td>
@@ -304,6 +308,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="reach-for-hilog-when" class="level3" data-number="9.2.2">
 <h3 data-number="9.2.2" class="anchored" data-anchor-id="reach-for-hilog-when"><span class="header-section-number">9.2.2</span> Reach for <code>hilog</code> when:</h3>
 <ul>
+<li>you want your script to explain what it is doing while it runs</li>
 <li>you are writing a package or process that needs explicit logs</li>
 <li>you want debug/info/error behavior without inventing your own logger</li>
 </ul>
@@ -767,4 +772,4 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/DarioFanucchi/HiverseBook/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/DarioFanucchi/HiverseBook/blob/main/07-supporting-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>
