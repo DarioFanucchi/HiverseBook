@@ -94,6 +94,51 @@ This is a good default rule:
 - use `*-stable` when you want a more conservative default for shared workflows
 - use a dated or explicit concrete model ID when you need exact reproducibility
 
+### A fast entry point: `prompt_to_df()`
+
+Before you learn the builder DSL, it is worth learning `prompt_to_df()`.
+
+It is one of the quickest ways to go from unstructured text to a usable table:
+
+- write a prompt
+- declare the columns you want back
+- get a data frame directly
+
+This overlaps with `set_schema()` and structured outputs in the builder DSL, but
+it is a good teaching surface because the interface is short and the result is
+immediately usable in ordinary R code.
+
+```{r}
+issue_schema <- data.frame(
+  column_name = c("issue", "affected_rows", "likely_risk"),
+  column_type = c("string", "integer", "string"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, eval=openai_key_available}
+incident_note <- paste(
+  "Audit notes for this week's orders extract:",
+  "12 rows have duplicate order_id values.",
+  "4 rows have missing customer_id.",
+  "2 rows have negative total_amount.",
+  "Return a table with issue, affected_rows, and likely_risk."
+)
+
+higpt::prompt_to_df(
+  prompt = incident_note,
+  output_dataframe_schema = issue_schema,
+  model_name = "gpt-mini-latest",
+  max_tokens = 600,
+  multiple_rows = TRUE
+)
+```
+
+This is especially useful when you are extracting structure from notes,
+incident summaries, free-text requirements, meeting minutes, or messy
+documentation. Once you need more control over prompts, tools, logging, async
+jobs, or prompt templates, move to the builder DSL below.
+
 ### Builder-first workflow
 
 The tidy DSL is useful when you want a reusable chat template rather than a

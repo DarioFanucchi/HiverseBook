@@ -223,12 +223,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#two-useful-mental-models" id="toc-two-useful-mental-models" class="nav-link" data-scroll-target="#two-useful-mental-models"><span class="header-section-number">6.1.1</span> Two useful mental models</a></li>
   <li><a href="#model-aliases--latest-and-friends" id="toc-model-aliases--latest-and-friends" class="nav-link" data-scroll-target="#model-aliases--latest-and-friends"><span class="header-section-number">6.1.2</span> Model aliases: <code>-latest</code> and friends</a></li>
-  <li><a href="#builder-first-workflow" id="toc-builder-first-workflow" class="nav-link" data-scroll-target="#builder-first-workflow"><span class="header-section-number">6.1.3</span> Builder-first workflow</a></li>
-  <li><a href="#structured-outputs-with-schema-builders" id="toc-structured-outputs-with-schema-builders" class="nav-link" data-scroll-target="#structured-outputs-with-schema-builders"><span class="header-section-number">6.1.4</span> Structured outputs with schema builders</a></li>
-  <li><a href="#tools-with-the-builder" id="toc-tools-with-the-builder" class="nav-link" data-scroll-target="#tools-with-the-builder"><span class="header-section-number">6.1.5</span> Tools with the builder</a></li>
-  <li><a href="#prompt-files-and-row-wise-workflows" id="toc-prompt-files-and-row-wise-workflows" class="nav-link" data-scroll-target="#prompt-files-and-row-wise-workflows"><span class="header-section-number">6.1.6</span> Prompt files and row-wise workflows</a></li>
-  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">6.1.7</span> Try it</a></li>
-  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">6.1.8</span> Stretch</a></li>
+  <li><a href="#a-fast-entry-point-prompt_to_df" id="toc-a-fast-entry-point-prompt_to_df" class="nav-link" data-scroll-target="#a-fast-entry-point-prompt_to_df"><span class="header-section-number">6.1.3</span> A fast entry point: <code>prompt_to_df()</code></a></li>
+  <li><a href="#builder-first-workflow" id="toc-builder-first-workflow" class="nav-link" data-scroll-target="#builder-first-workflow"><span class="header-section-number">6.1.4</span> Builder-first workflow</a></li>
+  <li><a href="#structured-outputs-with-schema-builders" id="toc-structured-outputs-with-schema-builders" class="nav-link" data-scroll-target="#structured-outputs-with-schema-builders"><span class="header-section-number">6.1.5</span> Structured outputs with schema builders</a></li>
+  <li><a href="#tools-with-the-builder" id="toc-tools-with-the-builder" class="nav-link" data-scroll-target="#tools-with-the-builder"><span class="header-section-number">6.1.6</span> Tools with the builder</a></li>
+  <li><a href="#prompt-files-and-row-wise-workflows" id="toc-prompt-files-and-row-wise-workflows" class="nav-link" data-scroll-target="#prompt-files-and-row-wise-workflows"><span class="header-section-number">6.1.7</span> Prompt files and row-wise workflows</a></li>
+  <li><a href="#try-it" id="toc-try-it" class="nav-link" data-scroll-target="#try-it"><span class="header-section-number">6.1.8</span> Try it</a></li>
+  <li><a href="#stretch" id="toc-stretch" class="nav-link" data-scroll-target="#stretch"><span class="header-section-number">6.1.9</span> Stretch</a></li>
   </ul></li>
   <li><a href="#higrate-from-data-frames-to-reusable-knowledge" id="toc-higrate-from-data-frames-to-reusable-knowledge" class="nav-link" data-scroll-target="#higrate-from-data-frames-to-reusable-knowledge"><span class="header-section-number">6.2</span> <code>higrate</code>: from data frames to reusable knowledge</a>
   <ul class="collapse">
@@ -381,17 +382,63 @@ Note
 <li>use a dated or explicit concrete model ID when you need exact reproducibility</li>
 </ul>
 </section>
-<section id="builder-first-workflow" class="level3" data-number="6.1.3">
-<h3 data-number="6.1.3" class="anchored" data-anchor-id="builder-first-workflow"><span class="header-section-number">6.1.3</span> Builder-first workflow</h3>
+<section id="a-fast-entry-point-prompt_to_df" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="a-fast-entry-point-prompt_to_df"><span class="header-section-number">6.1.3</span> A fast entry point: <code>prompt_to_df()</code></h3>
+<p>Before you learn the builder DSL, it is worth learning <code>prompt_to_df()</code>.</p>
+<p>It is one of the quickest ways to go from unstructured text to a usable table:</p>
+<ul>
+<li>write a prompt</li>
+<li>declare the columns you want back</li>
+<li>get a data frame directly</li>
+</ul>
+<p>This overlaps with <code>set_schema()</code> and structured outputs in the builder DSL, but it is a good teaching surface because the interface is short and the result is immediately usable in ordinary R code.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>issue_schema <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_name =</span> <span class="fu">c</span>(<span class="st">"issue"</span>, <span class="st">"affected_rows"</span>, <span class="st">"likely_risk"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_type =</span> <span class="fu">c</span>(<span class="st">"string"</span>, <span class="st">"integer"</span>, <span class="st">"string"</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>incident_note <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Audit notes for this week's orders extract:"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"12 rows have duplicate order_id values."</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"4 rows have missing customer_id."</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2 rows have negative total_amount."</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Return a table with issue, affected_rows, and likely_risk."</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">prompt_to_df</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">prompt =</span> incident_note,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_dataframe_schema =</span> issue_schema,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_tokens =</span> <span class="dv">600</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">multiple_rows =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  issue affected_rows
+1    Duplicate order_id            12
+2   Missing customer_id             4
+3 Negative total_amount             2
+                                                                                                                                                        likely_risk
+1                                         Inflated or duplicated order counts, potential double fulfillment or billing, and inaccurate sales/fulfillment reporting.
+2                       Orders cannot be linked to customers, causing fulfillment failures, inability to contact customers, and gaps in customer analytics/support.
+3 Incorrect financial data—possible data-entry or processing errors; may indicate improperly recorded refunds/chargebacks and will distort revenue/finance reports.</code></pre>
+</div>
+</div>
+<p>This is especially useful when you are extracting structure from notes, incident summaries, free-text requirements, meeting minutes, or messy documentation. Once you need more control over prompts, tools, logging, async jobs, or prompt templates, move to the builder DSL below.</p>
+</section>
+<section id="builder-first-workflow" class="level3" data-number="6.1.4">
+<h3 data-number="6.1.4" class="anchored" data-anchor-id="builder-first-workflow"><span class="header-section-number">6.1.4</span> Builder-first workflow</h3>
 <p>The tidy DSL is useful when you want a reusable chat template rather than a one-off prompt.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>quality_chat <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-5-mini"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_system_prompt</span>(<span class="st">"You are a concise data quality assistant."</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"List three first checks for a new orders table."</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_reasoning_effort</span>(<span class="st">"minimal"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_options</span>(<span class="at">temperature =</span> <span class="fl">0.2</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">preview</span>(quality_chat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>quality_chat <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-5-mini"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_system_prompt</span>(<span class="st">"You are a concise data quality assistant."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"List three first checks for a new orders table."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_reasoning_effort</span>(<span class="st">"minimal"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_options</span>(<span class="at">temperature =</span> <span class="fl">0.2</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">preview</span>(quality_chat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   role  content  
@@ -400,85 +447,85 @@ Note
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>builder_result <span class="ot">&lt;-</span> quality_chat <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(builder_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>builder_result <span class="ot">&lt;-</span> quality_chat <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(builder_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "1) Row-level completeness: check for NULLs or missing values in required key fields (order_id, customer_id, order_date, total_amount). Verify order_id is unique (no duplicates) and customer_id/order_date non-null.\n\n2) Data type and range validity: ensure numeric and date fields conform (total_amount &gt;= 0, quantity &gt; 0, order_date within expected window — not in future or too far past). Confirm types/parsing succeed (dates parseable, amounts numeric).\n\n3) Referential integrity and business logic: confirm customer_id and product_id values exist in reference tables, and that order totals equal the sum of line items where available. Also spot-check statuses (order_status within allowed set) and detect orphaned line items or orders with zero line items."</code></pre>
+<pre><code>[1] "1) Row count and recent activity — verify data exists and is current  \n- Check total row count and count of rows with recent order_date (e.g., last 7/30 days).  \n- Confirm expected growth/volume compared to historical or business expectations.\n\n2) Key integrity and uniqueness — ensure primary identifier behaves as expected  \n- Confirm order_id (or primary key) is unique and non-null.  \n- Check for duplicate keys and unexpectedly repeated orders.\n\n3) Required fields and basic validity — ensure essential columns are present and plausible  \n- Verify presence and non-null for required columns (order_date, customer_id, total_amount, status).  \n- Validate data types and basic value ranges (dates in reasonable range, total_amount ≥ 0, status in allowed set)."</code></pre>
 </div>
 </div>
 </section>
-<section id="structured-outputs-with-schema-builders" class="level3" data-number="6.1.4">
-<h3 data-number="6.1.4" class="anchored" data-anchor-id="structured-outputs-with-schema-builders"><span class="header-section-number">6.1.4</span> Structured outputs with schema builders</h3>
+<section id="structured-outputs-with-schema-builders" class="level3" data-number="6.1.5">
+<h3 data-number="6.1.5" class="anchored" data-anchor-id="structured-outputs-with-schema-builders"><span class="header-section-number">6.1.5</span> Structured outputs with schema builders</h3>
 <p>The <code>make_schema()</code> / <code>add_field()</code> / <code>finalize_schema()</code> pattern is one of the most useful additions in the newer <code>higpt</code> material because it makes it easier to connect LLM outputs to downstream tables.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>check_schema <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_schema</span>(<span class="st">"quality_check"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"check_name"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"why_it_matters"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_schema</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>check_schema <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_schema</span>(<span class="st">"quality_check"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"check_name"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"why_it_matters"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_schema</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>schema_result <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-mini-latest"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"Name one important validation for an orders table."</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_schema</span>(check_schema, <span class="at">multiple_rows =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>schema_result <span class="sc">|&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">collect_df</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>schema_result <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-mini-latest"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"Name one important validation for an orders table."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_schema</span>(check_schema, <span class="at">multiple_rows =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>schema_result <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">collect_df</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                               check_name
-1 Foreign key constraint: customer_id must reference an existing customer
-                                                                                                                                                                  why_it_matters
-1 Ensures every order is linked to a valid customer, preventing orphaned orders and preserving referential integrity for accurate reporting, billing, and downstream processing.</code></pre>
+<pre><code>                                                                check_name
+1 customer_id must reference an existing customer (foreign key constraint)
+                                                                                                                                                                                                                                              why_it_matters
+1 Ensures every order is linked to a valid customer to prevent orphaned orders, maintain data integrity for billing/shipping/refunds, and enable reliable joins and analytics; it also prevents invalid or fraudulent orders tied to non-existent customers.</code></pre>
 </div>
 </div>
 <p>If a provider ignores native structured outputs, <code>enforce_schema()</code> is the fallback that cleans the text response into the requested shape.</p>
 </section>
-<section id="tools-with-the-builder" class="level3" data-number="6.1.5">
-<h3 data-number="6.1.5" class="anchored" data-anchor-id="tools-with-the-builder"><span class="header-section-number">6.1.5</span> Tools with the builder</h3>
+<section id="tools-with-the-builder" class="level3" data-number="6.1.6">
+<h3 data-number="6.1.6" class="anchored" data-anchor-id="tools-with-the-builder"><span class="header-section-number">6.1.6</span> Tools with the builder</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>add_numbers <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_tool</span>(<span class="st">"add_numbers"</span>, <span class="st">"Add two numbers together"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_parameter</span>(<span class="st">"a"</span>, <span class="st">"number"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_parameter</span>(<span class="st">"b"</span>, <span class="st">"number"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_tool</span>()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>handlers <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">add_numbers =</span> <span class="cf">function</span>(args) <span class="fu">as.character</span>(args<span class="sc">$</span>a <span class="sc">+</span> args<span class="sc">$</span>b)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>add_numbers <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_tool</span>(<span class="st">"add_numbers"</span>, <span class="st">"Add two numbers together"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_parameter</span>(<span class="st">"a"</span>, <span class="st">"number"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_parameter</span>(<span class="st">"b"</span>, <span class="st">"number"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_tool</span>()</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>handlers <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">add_numbers =</span> <span class="cf">function</span>(args) <span class="fu">as.character</span>(args<span class="sc">$</span>a <span class="sc">+</span> args<span class="sc">$</span>b)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tool_result <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-mini-latest"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"What is 12 + 30? Use the tool."</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_tool</span>(add_numbers) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_tool_choice</span>(<span class="st">"auto"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_tool_handlers</span>(handlers) <span class="sc">|&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(tool_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tool_result <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-mini-latest"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_user_message</span>(<span class="st">"What is 12 + 30? Use the tool."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_tool</span>(add_numbers) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_tool_choice</span>(<span class="st">"auto"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_tool_handlers</span>(handlers) <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">submit</span>()</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">collect_text</span>(tool_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "12 + 30 = 42"</code></pre>
+<pre><code>[1] "12 + 30 = 42."</code></pre>
 </div>
 </div>
 </section>
-<section id="prompt-files-and-row-wise-workflows" class="level3" data-number="6.1.6">
-<h3 data-number="6.1.6" class="anchored" data-anchor-id="prompt-files-and-row-wise-workflows"><span class="header-section-number">6.1.6</span> Prompt files and row-wise workflows</h3>
+<section id="prompt-files-and-row-wise-workflows" class="level3" data-number="6.1.7">
+<h3 data-number="6.1.7" class="anchored" data-anchor-id="prompt-files-and-row-wise-workflows"><span class="header-section-number">6.1.7</span> Prompt files and row-wise workflows</h3>
 <p>Once prompts become team assets, keep them on disk rather than burying them in scripts. <code>higpt</code> now supports prompt templates, prompt-schema bundles, and row-wise workflows like <code>mutate_llm()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>prompt_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".md"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You are supporting the {{team}} team."</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Summarise the main risks for {{topic}} in two bullets."</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  prompt_file</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>templated_chat <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-5-mini"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_prompt_template</span>(prompt_file, <span class="at">role =</span> <span class="st">"user"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">apply_prompt_template</span>(<span class="fu">list</span>(<span class="at">team =</span> <span class="st">"operations"</span>, <span class="at">topic =</span> <span class="st">"late deliveries"</span>))</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">preview</span>(templated_chat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>prompt_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".md"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You are supporting the {{team}} team."</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Summarise the main risks for {{topic}} in two bullets."</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  prompt_file</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>templated_chat <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_model</span>(<span class="st">"gpt-5-mini"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">set_prompt_template</span>(prompt_file, <span class="at">role =</span> <span class="st">"user"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">apply_prompt_template</span>(<span class="fu">list</span>(<span class="at">team =</span> <span class="st">"operations"</span>, <span class="at">topic =</span> <span class="st">"late deliveries"</span>))</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>higpt<span class="sc">::</span><span class="fu">preview</span>(templated_chat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   role  content  
@@ -487,41 +534,41 @@ Note
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>risk_schema <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_schema</span>(<span class="st">"risk_summary"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"topic"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_array_field</span>(<span class="st">"actions"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_schema</span>()</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>bundle <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">bundle_prompt_schema</span>(prompt_file, risk_schema)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>bundle<span class="sc">$</span>prompt_path</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>risk_schema <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">make_schema</span>(<span class="st">"risk_summary"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_field</span>(<span class="st">"topic"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">add_array_field</span>(<span class="st">"actions"</span>, <span class="st">"string"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  higpt<span class="sc">::</span><span class="fu">finalize_schema</span>()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>bundle <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">bundle_prompt_schema</span>(prompt_file, risk_schema)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>bundle<span class="sc">$</span>prompt_path</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/var/folders/br/z454x1nx287fg3mq63vg3r600000gn/T//RtmpfEIHRv/filefebd4570c204.md"</code></pre>
+<pre><code>[1] "/var/folders/br/z454x1nx287fg3mq63vg3r600000gn/T//Rtmphlu9uv/file9a03780cd326.md"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(bundle<span class="sc">$</span>schema<span class="sc">$</span>fields)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(bundle<span class="sc">$</span>schema<span class="sc">$</span>fields)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "topic"   "actions"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>driver_notes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="fu">c</span>(<span class="st">"stockouts"</span>, <span class="st">"late deliveries"</span>, <span class="st">"returns"</span>),</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>driver_notes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="fu">c</span>(<span class="st">"stockouts"</span>, <span class="st">"late deliveries"</span>, <span class="st">"returns"</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>notes <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">mutate_llm</span>(</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">"Write one business interpretation for"</span>, driver_notes<span class="sc">$</span>metric),</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span>,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">.progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">metric =</span> driver_notes<span class="sc">$</span>metric, <span class="at">note =</span> notes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>notes <span class="ot">&lt;-</span> higpt<span class="sc">::</span><span class="fu">mutate_llm</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">"Write one business interpretation for"</span>, driver_notes<span class="sc">$</span>metric),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">.progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">metric =</span> driver_notes<span class="sc">$</span>metric, <span class="at">note =</span> notes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If your team uses local or OpenAI-compatible endpoints, <code>register_custom_model()</code> and <code>list_endpoint_models()</code> are worth learning as well because the same builder patterns then work against internal infrastructure too.</p>
 </section>
-<section id="try-it" class="level3" data-number="6.1.7">
-<h3 data-number="6.1.7" class="anchored" data-anchor-id="try-it"><span class="header-section-number">6.1.7</span> Try it</h3>
+<section id="try-it" class="level3" data-number="6.1.8">
+<h3 data-number="6.1.8" class="anchored" data-anchor-id="try-it"><span class="header-section-number">6.1.8</span> Try it</h3>
 <p>This exercise needs an API key.</p>
 <ol type="1">
 <li>Use <code>get_available_models()</code> to find one model with structured outputs and one with vision support.</li>
@@ -529,8 +576,8 @@ Note
 <li>Add a schema and extract a one-row tibble with <code>enforce_schema() |&gt; collect_df()</code>.</li>
 </ol>
 </section>
-<section id="stretch" class="level3" data-number="6.1.8">
-<h3 data-number="6.1.8" class="anchored" data-anchor-id="stretch"><span class="header-section-number">6.1.8</span> Stretch</h3>
+<section id="stretch" class="level3" data-number="6.1.9">
+<h3 data-number="6.1.9" class="anchored" data-anchor-id="stretch"><span class="header-section-number">6.1.9</span> Stretch</h3>
 <p>Create a small reusable workflow that includes all of these:</p>
 <ul>
 <li>a prompt file on disk</li>
@@ -556,44 +603,44 @@ Note
 <section id="example-with-no-llm-requirement" class="level3" data-number="6.2.2">
 <h3 data-number="6.2.2" class="anchored" data-anchor-id="example-with-no-llm-requirement"><span class="header-section-number">6.2.2</span> Example with no LLM requirement</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(higrate)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>orders_dirty <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">record_id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_id =</span> <span class="fu">c</span>(<span class="st">"C001"</span>, <span class="st">"C001"</span>, <span class="st">"C003"</span>, <span class="st">"C004"</span>, <span class="st">"C002"</span>, <span class="st">"C002"</span>),</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_id =</span> <span class="fu">c</span>(<span class="st">"O100"</span>, <span class="st">"O101"</span>, <span class="st">"O300"</span>, <span class="st">"O400"</span>, <span class="st">"O200"</span>, <span class="st">"O200"</span>),</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_date =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2025-01-03"</span>, <span class="st">"2025-01-08"</span>, <span class="st">"2025-02-01"</span>, <span class="st">"2025-02-05"</span>, <span class="st">"2025-01-10"</span>, <span class="st">"2025-01-10"</span>)),</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_status =</span> <span class="fu">c</span>(<span class="st">"shipped"</span>, <span class="st">"processing"</span>, <span class="st">"shipped"</span>, <span class="st">"processing"</span>, <span class="st">"processing"</span>, <span class="st">"cancelled"</span>),</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">amount =</span> <span class="fu">c</span>(<span class="dv">1200</span>, <span class="dv">950</span>, <span class="dv">2000</span>, <span class="dv">500</span>, <span class="dv">850</span>, <span class="dv">850</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>orders_desc <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_table_description</span>(</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  orders_dirty,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">table_name =</span> <span class="st">"orders"</span>,</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm_columns =</span> <span class="cn">FALSE</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>customers <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_id =</span> <span class="fu">c</span>(<span class="st">"C001"</span>, <span class="st">"C002"</span>, <span class="st">"C003"</span>),</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">segment =</span> <span class="fu">c</span>(<span class="st">"retail"</span>, <span class="st">"retail"</span>, <span class="st">"wholesale"</span>),</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">region =</span> <span class="fu">c</span>(<span class="st">"Gauteng"</span>, <span class="st">"Western Cape"</span>, <span class="st">"KZN"</span>)</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>customers_desc <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_table_description</span>(</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  customers,</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">table_name =</span> <span class="st">"customers"</span>,</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm_columns =</span> <span class="cn">FALSE</span></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>rel <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_relationships</span>(</span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  orders_desc,</span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  customers_desc,</span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span></span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>rel<span class="sc">$</span>proposed_relationships</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(higrate)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>orders_dirty <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">record_id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_id =</span> <span class="fu">c</span>(<span class="st">"C001"</span>, <span class="st">"C001"</span>, <span class="st">"C003"</span>, <span class="st">"C004"</span>, <span class="st">"C002"</span>, <span class="st">"C002"</span>),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_id =</span> <span class="fu">c</span>(<span class="st">"O100"</span>, <span class="st">"O101"</span>, <span class="st">"O300"</span>, <span class="st">"O400"</span>, <span class="st">"O200"</span>, <span class="st">"O200"</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_date =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2025-01-03"</span>, <span class="st">"2025-01-08"</span>, <span class="st">"2025-02-01"</span>, <span class="st">"2025-02-05"</span>, <span class="st">"2025-01-10"</span>, <span class="st">"2025-01-10"</span>)),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">order_status =</span> <span class="fu">c</span>(<span class="st">"shipped"</span>, <span class="st">"processing"</span>, <span class="st">"shipped"</span>, <span class="st">"processing"</span>, <span class="st">"processing"</span>, <span class="st">"cancelled"</span>),</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">amount =</span> <span class="fu">c</span>(<span class="dv">1200</span>, <span class="dv">950</span>, <span class="dv">2000</span>, <span class="dv">500</span>, <span class="dv">850</span>, <span class="dv">850</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>orders_desc <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_table_description</span>(</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  orders_dirty,</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">table_name =</span> <span class="st">"orders"</span>,</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm_columns =</span> <span class="cn">FALSE</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>customers <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_id =</span> <span class="fu">c</span>(<span class="st">"C001"</span>, <span class="st">"C002"</span>, <span class="st">"C003"</span>),</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">segment =</span> <span class="fu">c</span>(<span class="st">"retail"</span>, <span class="st">"retail"</span>, <span class="st">"wholesale"</span>),</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">region =</span> <span class="fu">c</span>(<span class="st">"Gauteng"</span>, <span class="st">"Western Cape"</span>, <span class="st">"KZN"</span>)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>customers_desc <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_table_description</span>(</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  customers,</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">table_name =</span> <span class="st">"customers"</span>,</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm_columns =</span> <span class="cn">FALSE</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>rel <span class="ot">&lt;-</span> higrate<span class="sc">::</span><span class="fu">generate_relationships</span>(</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>  orders_desc,</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  customers_desc,</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_llm =</span> <span class="cn">FALSE</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>rel<span class="sc">$</span>proposed_relationships</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  column_name_1 column_name_2 fwd_score bwd_score overlap
 1   customer_id   customer_id 0.8333333         1       1</code></pre>
@@ -657,16 +704,16 @@ Note
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="example"><span class="header-section-number">6.3.2</span> Example</h3>
 <p>This example is shown but not executed in the book. <code>hidrogen</code> runs through <code>higpt</code>, so it needs the same provider setup as the live <code>higpt</code> examples or a registered local/OpenAI-compatible model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hidrogen)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>exploration <span class="ot">&lt;-</span> hidrogen<span class="sc">::</span><span class="fu">run_data_explorer</span>(</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  mtcars,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_rows =</span> <span class="dv">3</span>,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>executive_summary</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>key_insights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hidrogen)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>exploration <span class="ot">&lt;-</span> hidrogen<span class="sc">::</span><span class="fu">run_data_explorer</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  mtcars,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_rows =</span> <span class="dv">3</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_name =</span> <span class="st">"gpt-mini-latest"</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>executive_summary</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>exploration<span class="sc">$</span>report<span class="sc">$</span>key_insights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="why-it-matters" class="level3" data-number="6.3.3">
