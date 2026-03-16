@@ -28,37 +28,46 @@ plus several specific methods under the hood.
 ### Example
 
 ```{r}
-#| eval: false
 library(hipoint)
 
+set.seed(42)
+
 signal_df <- data.frame(
-  date = seq.Date(as.Date("2026-01-01"), by = "day", length.out = 30),
-  signal = c(rep(10, 10), rep(18, 10), rep(17, 10))
+  date = seq.Date(as.Date("2026-01-01"), by = "day", length.out = 40),
+  signal = c(
+    rnorm(15, mean = 10, sd = 0.8),
+    rnorm(15, mean = 18, sd = 0.8),
+    32,
+    rnorm(9, mean = 17, sd = 0.8)
+  )
 )
 
-hipoint::chpts.detect_changepoints(
-  signal_df,
-  index = "date",
-  signal = "signal",
-  method = "intercept"
-)
+invisible(utils::capture.output({
+  suppressMessages({
+    change_points <- hipoint::chpts.detect_changepoints(
+      signal_df,
+      index = "date",
+      signal = "signal",
+      method = "intercept"
+    )
+  })
+}))
 
-hipoint::outlier.detect_anomalies(
+anomalies <- hipoint::outlier.detect_anomalies(
   signal_df,
   index = "date",
   signal = "signal",
   method = "mad"
 )
+
+change_points
+anomalies
 ```
 
 ### A visual intuition
 
 ```{r}
-set.seed(42)
-signal_df <- data.frame(
-  idx = 1:40,
-  signal = c(rnorm(15, mean = 10, sd = 0.8), rnorm(15, mean = 18, sd = 0.8), 32, rnorm(9, mean = 17, sd = 0.8))
-)
+signal_df$idx <- seq_len(nrow(signal_df))
 
 plot(
   signal_df$idx,
@@ -128,20 +137,33 @@ flowchart LR
 ### Example with the package sample data
 
 ```{r}
-#| eval: false
-library(hisched)
+suppressPackageStartupMessages(library(hisched))
 
-problem <- hisched::make_schedule_problem(
-  enrol = hisched::enrol_sample,
+set.seed(123)
+
+sched_input <- hisched::prepare_sched_input(
   sched_input = hisched::sched_input_sample,
   target_date = as.Date("2026-01-12"),
   school = "IEB",
   phase = "FET"
 )
 
-problem <- hisched::create_initial_schedule(problem)
-problem <- hisched::score(problem)
-problem <- hisched::validate(problem)
+invisible(utils::capture.output({
+  problem <- hisched::make_schedule_problem(
+    enrol = hisched::enrol_sample,
+    sched_input = sched_input,
+    target_date = as.Date("2026-01-12"),
+    school = "IEB",
+    phase = "FET"
+  )
+
+  problem <- hisched::create_initial_schedule(problem, verbose = FALSE)
+  problem <- hisched::score(problem, engine = "r")
+  problem <- hisched::validate(problem)
+}))
+
+problem$score$total_cost
+head(problem$issues[, c("type", "severity", "explanation")])
 ```
 
 ### Why this package is interesting even if you never schedule timetables

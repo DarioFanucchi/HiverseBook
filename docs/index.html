@@ -43,21 +43,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-bf8030b5a8b8f2de5bceddfb8bf38a1d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  if (window.mermaid) {
-    mermaid.initialize({ startOnLoad: false });
-    document.querySelectorAll("pre.mermaid").forEach(function (el) {
-      const div = document.createElement("div");
-      div.className = "mermaid";
-      div.textContent = el.textContent;
-      el.replaceWith(div);
-    });
-    mermaid.run({ querySelector: "div.mermaid" });
-  }
-});
-</script>
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -85,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.scss">
@@ -254,7 +242,12 @@ document.addEventListener("DOMContentLoaded", function () {
 </ol>
 <section id="the-package-map" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="the-package-map"><span class="header-section-number">1.1</span> The package map</h2>
-<pre class="mermaid"><code>flowchart LR
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
   A["Raw files, tables, process outputs"] --&gt; B["himunge"]
   A --&gt; C["hiconnect"]
   B --&gt; D["higrate"]
@@ -265,11 +258,16 @@ document.addEventListener("DOMContentLoaded", function () {
   H["LLM providers"] --&gt; I["higpt"]
   I --&gt; D
   I --&gt; J["hidrogen"]
-  I --&gt; K["hipilot"]
   L["Time-based analysis"] --&gt; M["hidate"]
   M --&gt; E
   M --&gt; G
-  N["Signals and monitoring"] --&gt; O["hipoint"]</code></pre>
+  N["Signals and monitoring"] --&gt; O["hipoint"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="how-to-use-this-book" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="how-to-use-this-book"><span class="header-section-number">1.2</span> How to use this book</h2>
@@ -321,7 +319,6 @@ document.addEventListener("DOMContentLoaded", function () {
 <li><code>himatch</code></li>
 <li><code>higest</code></li>
 <li><code>hidalgo</code></li>
-<li><code>hipilot</code></li>
 </ul>
 </section>
 <section id="suggested-study-tracks" class="level2" data-number="1.5">
@@ -347,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </tr>
 <tr class="even">
 <td>AI-era extension track</td>
-<td><code>higpt</code>, <code>higrate</code>, <code>hidrogen</code>, <code>hipilot</code></td>
+<td><code>higpt</code>, <code>higrate</code>, <code>hidrogen</code></td>
 <td>These packages add leverage once you already understand the underlying data and workflows.</td>
 </tr>
 <tr class="odd">

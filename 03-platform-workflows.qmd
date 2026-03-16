@@ -22,15 +22,117 @@ output, you often need process context, not just data context.
 
 ### Example
 
+The book renders this example against a tiny mocked process registry so that
+the actual `hiproc` calls can run without Hudson access.
+
 ```{r}
-#| eval: false
+#| echo: false
+with_mocked_hiconnect_pg_get_query <- function(mock_fn, expr) {
+  ns <- asNamespace("hiconnect")
+  old <- get("pg_get_query", envir = ns)
+  unlockBinding("pg_get_query", ns)
+  assign("pg_get_query", mock_fn, envir = ns)
+  lockBinding("pg_get_query", ns)
+  on.exit({
+    unlockBinding("pg_get_query", ns)
+    assign("pg_get_query", old, envir = ns)
+    lockBinding("pg_get_query", ns)
+  }, add = TRUE)
+  force(expr)
+}
+
+mock_process_pg_get_query <- function(schemas = NULL, statement = NULL, params = NULL, con = NULL, ...) {
+  sql <- gsub("\\s+", " ", statement)
+
+  if (grepl("from process.process pp left join process.event pe", sql, fixed = TRUE)) {
+    return(data.frame(
+      name = c("ingest_orders", "ingest_orders", "build_dashboard"),
+      process_id = c(1L, 1L, 2L),
+      event_type = c("Success", "Failed", "Success"),
+      first_run_date = as.Date(c("2026-01-01", "2026-01-05", "2026-01-02")),
+      last_run_date = as.Date(c("2026-01-10", "2026-01-12", "2026-01-15")),
+      last_process_result_id = c(10L, 12L, 15L),
+      num_runs = c(5L, 1L, 4L)
+    ))
+  }
+
+  if (grepl("select process_id from process.process where name = \\$1", sql)) {
+    ids <- c(ingest_orders = 1L, build_dashboard = 2L)
+    return(data.frame(process_id = ids[[params[[1]]]]))
+  }
+
+  if (grepl("process_dependency_process", sql)) {
+    return(data.frame(
+      name = c("build_dashboard"),
+      process_id = c(2L),
+      dependency_process_id = c(1L),
+      dependency_process_name = c("ingest_orders"),
+      output_schema = c("scratch"),
+      output_table = c("orders"),
+      group_id = c(1L),
+      group_name = c("upstream process"),
+      data_only = c(FALSE),
+      cyclic = c(FALSE)
+    ))
+  }
+
+  if (grepl("process_dependency_static", sql)) {
+    return(data.frame(
+      process_id = c(1L),
+      static_table_id = c(101L),
+      static_table_name = c("calendar_dim"),
+      static_table_schema = c("static"),
+      static_table_table = c("calendar_dim"),
+      group_id = c(11L),
+      group_name = c("calendar"),
+      data_only = c(TRUE)
+    ))
+  }
+
+  if (grepl("process_dependency_scheduled", sql)) {
+    return(data.frame(
+      process_id = c(1L),
+      cron_min = c("0"),
+      cron_hour = c("6"),
+      cron_day = c("*"),
+      cron_month = c("*"),
+      cron_week_day = c("1-5"),
+      group_id = c(12L),
+      group_name = c("weekday trigger"),
+      data_only = c(FALSE)
+    ))
+  }
+
+  if (grepl("process_dependency_manual", sql)) {
+    return(data.frame(
+      process_id = integer(),
+      manual_dependency = character(),
+      group_id = integer(),
+      group_name = character(),
+      data_only = logical()
+    ))
+  }
+
+  stop("Unhandled SQL in mock: ", sql)
+}
+```
+
+```{r}
 library(hiproc)
 
-events <- hiproc::event_summary()
-head(events)
+offline_process_view <- with_mocked_hiconnect_pg_get_query(mock_process_pg_get_query, {
+  list(
+    events = hiproc::event_summary(),
+    deps = hiproc::get_dependencies(
+      "build_dashboard",
+      recursive = TRUE,
+      con = structure(list(), class = "mock_con")
+    )
+  )
+})
 
-deps <- hiproc::get_dependencies("some_process_name")
-deps
+offline_process_view$events[, c("process_name", "last_status", "diagnostic")]
+offline_process_view$deps$process[, c("name", "dependency_process_name", "depth")]
 ```
 
 ### Process thinking
@@ -81,14 +183,48 @@ The package frames ingestion as four steps:
 
 ### Example pipeline shape
 
-```{r}
-#| eval: false
-pipeline <- higest::prepare("process X", my_format_df) |>
-  higest::add_read_spec_csv() |>
-  higest::add_transformation_identity() |>
-  higest::add_write_spec_replace()
+The full `prepare()` path also needs a process config file and a writable Hudson
+target. For a day-one local sandbox, you can start one step later with a tiny
+spec and still run the package pipeline end to end.
 
-higest::run_higest_pipeline(pipeline)
+```{r}
+library(higest)
+
+tmp_csv <- tempfile(fileext = ".csv")
+write.csv(
+  data.frame(order_id = c("O100", "O101"), amount = c(1200, 950)),
+  tmp_csv,
+  row.names = FALSE
+)
+
+my_format_df <- data.frame(
+  orig_name = c("order_id", "amount"),
+  clean_name = c("order_id", "amount"),
+  final_name = c("order_id", "amount"),
+  format = c("character", "numeric"),
+  stringsAsFactors = FALSE
+)
+
+pipeline <- list(
+  ingestion_process_name = "toy_orders",
+  file = list(path = tmp_csv),
+  format_df = my_format_df,
+  output_table = list(schema = "scratch", table = "toy_orders")
+)
+class(pipeline) <- "higest_spec"
+
+pipeline <- pipeline |>
+  higest::add_read_spec_csv() |>
+  higest::add_transformation_identity()
+
+pipeline$write_spec <- list(type = "collect")
+pipeline$write_fn <- function(hs) hs$final_data
+
+invisible(utils::capture.output({
+  result <- higest::run_higest_pipeline(pipeline)
+}))
+
+result$result
 ```
 
 The important lesson is not the exact function names. It is the idea that

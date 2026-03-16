@@ -19,7 +19,6 @@ flavor, not as a general replacement for all of R's modeling ecosystem.
 ## A minimal example
 
 ```{r}
-#| eval: false
 library(himodel)
 
 forecast_eval <- data.frame(

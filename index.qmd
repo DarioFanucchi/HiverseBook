@@ -37,7 +37,6 @@ flowchart LR
   H["LLM providers"] --> I["higpt"]
   I --> D
   I --> J["hidrogen"]
-  I --> K["hipilot"]
   L["Time-based analysis"] --> M["hidate"]
   M --> E
   M --> G
@@ -93,14 +92,13 @@ Supporting package catalog:
 - `himatch`
 - `higest`
 - `hidalgo`
-- `hipilot`
 
 ## Suggested study tracks
 
 | Track | Packages | Why start here? |
 |---|---|---|
 | Core data scientist track | `himunge`, `hiconnect`, `hidate`, `hilog`, `hiproc`, `himodel` | These packages are closest to day-to-day Hudson analysis and platform work. |
-| AI-era extension track | `higpt`, `higrate`, `hidrogen`, `hipilot` | These packages add leverage once you already understand the underlying data and workflows. |
+| AI-era extension track | `higpt`, `higrate`, `hidrogen` | These packages add leverage once you already understand the underlying data and workflows. |
 | Specialist track | `hipoint`, `hisched` | High-value in the right domain, but not required for every new joiner immediately. |
 | Supporting tools track | `hiplot`, `hifile`, `hidoc`, `hidash`, `himatch`, `higest`, `hidalgo` | Useful context and workflow support, but not the best first investment for most people. |
 

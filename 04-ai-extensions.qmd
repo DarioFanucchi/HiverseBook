@@ -9,7 +9,6 @@ These packages sit on top of the more traditional Hudson stack.
 - `higpt` is the foundation.
 - `higrate` is about profiling and knowledge-base generation.
 - `hidrogen` is about agentic workflows.
-- `hipilot` is the RStudio-side productivity layer.
 
 ## `higpt`: the foundation layer
 
@@ -24,70 +23,256 @@ It is the main LLM interface package for the ecosystem and supports:
 - image and audio workflows
 - multiple providers
 
-### Minimal example
+### Two useful mental models
+
+- `continue_chat()` and `chat_with_tools()` are the lower-level interfaces.
+- `make_model() |> ... |> submit()` is the newer tidy DSL.
+- The builder DSL is usually the better teaching surface because it keeps
+  prompts, schemas, tools, logging, and async settings in one object.
+
+The live versions need API keys. The runnable book examples below swap in mock
+provider responses so you can still see the workflow offline.
 
 ```{r}
-#| eval: false
-library(higpt)
-
-Sys.setenv(OPENAI_API_KEY = "sk-...")
-
-reply <- higpt::continue_chat(
-  data.frame(role = "user", content = "Summarise why primary keys matter in data quality."),
-  model_name = "gpt-5-mini",
-  reasoning_effort = "minimal"
-)
-
-cat(reply)
+#| echo: false
+with_mocked_namespace_function <- function(package_name, function_name, mock_fn, expr) {
+  ns <- asNamespace(package_name)
+  old <- get(function_name, envir = ns)
+  unlockBinding(function_name, ns)
+  assign(function_name, mock_fn, envir = ns)
+  lockBinding(function_name, ns)
+  on.exit({
+    unlockBinding(function_name, ns)
+    assign(function_name, old, envir = ns)
+    lockBinding(function_name, ns)
+  }, add = TRUE)
+  force(expr)
+}
 ```
 
-### Tool-calling example
+```{r}
+library(higpt)
+
+capable_models <- subset(
+  higpt::get_available_models("continue_chat"),
+  structured_outputs | supports_vision,
+  select = c(model, api, structured_outputs, supports_vision)
+)
+
+utils::head(capable_models, 6)
+```
+
+### Model aliases: `-latest` and friends
+
+One of the most practical `higpt` features is that many model names are aliases
+rather than hard-coded vendor IDs.
 
 ```{r}
-#| eval: false
-tool <- higpt::new_tool_function(
-  name = "add_numbers",
-  description = "Add two numbers.",
-  parameters = list(
-    type = "object",
-    properties = list(
-      a = list(type = "number"),
-      b = list(type = "number")
-    ),
-    required = list("a", "b")
-  )
+alias_models <- subset(
+  higpt::get_available_models("continue_chat"),
+  model %in% c(
+    "gpt-latest",
+    "gpt-chat-latest",
+    "gpt-mini-latest",
+    "claude-sonnet-latest",
+    "gemini-pro-latest",
+    "grok-latest"
+  ),
+  select = c(model, api, api_model, category)
 )
+
+alias_models
+```
+
+As of 2026-03-17 in the current package registry, those aliases resolve to
+concrete IDs via the `api_model` column. For example:
+
+- `gpt-latest` currently resolves to `gpt-5.4`
+- `gpt-chat-latest` currently resolves to `gpt-5.3-chat-latest`
+- `claude-sonnet-latest` currently resolves to `claude-sonnet-4-6`
+- `gemini-pro-latest` currently resolves to `gemini-3.1-pro-preview`
+
+This is a good default rule:
+
+- use `*-latest` when you want the newest capabilities without editing code
+- use `*-stable` when you want a more conservative default for shared workflows
+- use a dated or explicit concrete model ID when you need exact reproducibility
+
+### Builder-first workflow
+
+The tidy DSL is useful when you want a reusable chat template rather than a
+one-off prompt.
+
+```{r}
+quality_chat <- higpt::make_model("gpt-5-mini") |>
+  higpt::add_system_prompt("You are a concise data quality assistant.") |>
+  higpt::add_user_message("List three first checks for a new orders table.") |>
+  higpt::set_reasoning_effort("minimal") |>
+  higpt::set_options(temperature = 0.2)
+
+higpt::preview(quality_chat)
+```
+
+```{r}
+mock_builder_reply <- function(...) {
+  paste(
+    "- confirm the primary key is unique",
+    "- check order dates are populated and sensible",
+    "- compare order totals against expected ranges",
+    sep = "\n"
+  )
+}
+
+builder_result <- with_mocked_namespace_function("higpt", "continue_chat", mock_builder_reply, {
+  quality_chat |>
+    higpt::submit()
+})
+
+higpt::collect_text(builder_result)
+```
+
+### Structured outputs with schema builders
+
+The `make_schema()` / `add_field()` / `finalize_schema()` pattern is one of the
+most useful additions in the newer `higpt` material because it makes it easier
+to connect LLM outputs to downstream tables.
+
+```{r}
+check_schema <- higpt::make_schema("quality_check") |>
+  higpt::add_field("check_name", "string") |>
+  higpt::add_field("why_it_matters", "string") |>
+  higpt::finalize_schema()
+
+schema_result <- with_mocked_namespace_function("higpt", "continue_chat", function(...) {
+  paste(
+    "```json",
+    "{\"check_name\":\"primary key uniqueness\",\"why_it_matters\":\"Duplicate order IDs break joins, aggregations, and downstream QA.\"}",
+    "```",
+    sep = "\n"
+  )
+}, {
+  higpt::make_model("gpt-5-mini") |>
+    higpt::add_user_message("Name one important validation for an orders table.") |>
+    higpt::set_schema(check_schema, multiple_rows = FALSE) |>
+    higpt::submit()
+})
+
+schema_result |>
+  higpt::enforce_schema() |>
+  higpt::collect_df()
+```
+
+### Tools with the builder
+
+```{r}
+add_numbers <- higpt::make_tool("add_numbers", "Add two numbers together") |>
+  higpt::add_parameter("a", "number", required = TRUE) |>
+  higpt::add_parameter("b", "number", required = TRUE) |>
+  higpt::finalize_tool()
 
 handlers <- list(
   add_numbers = function(args) as.character(args$a + args$b)
 )
 
-higpt::chat_with_tools(
-  chat_messages = data.frame(role = "user", content = "What is 12 + 30?"),
-  tools = list(tool),
-  tool_handlers = handlers,
-  model_name = "gpt-5-mini",
-  reasoning_effort = "minimal"
-)
+mock_tool_builder <- function(...) {
+  list(
+    content = "The answer is 42.",
+    response = list(
+      usage = list(input_tokens = 10, output_tokens = 5)
+    )
+  )
+}
+
+tool_result <- with_mocked_namespace_function("higpt", "chat_with_tools", mock_tool_builder, {
+  higpt::make_model("gpt-5-mini") |>
+    higpt::add_user_message("What is 12 + 30? Use the tool.") |>
+    higpt::add_tool(add_numbers) |>
+    higpt::set_tool_choice("auto") |>
+    higpt::set_tool_handlers(handlers) |>
+    higpt::submit()
+})
+
+higpt::collect_text(tool_result)
 ```
+
+### Prompt files and row-wise workflows
+
+Once prompts become team assets, keep them on disk rather than burying them in
+scripts. `higpt` now supports prompt templates, prompt-schema bundles, and
+row-wise workflows like `mutate_llm()`.
+
+```{r}
+prompt_file <- tempfile(fileext = ".md")
+writeLines(
+  c(
+    "You are supporting the {{team}} team.",
+    "Summarise the main risks for {{topic}} in two bullets."
+  ),
+  prompt_file
+)
+
+templated_chat <- higpt::make_model("gpt-5-mini") |>
+  higpt::set_prompt_template(prompt_file, role = "user") |>
+  higpt::apply_prompt_template(list(team = "operations", topic = "late deliveries"))
+
+higpt::preview(templated_chat)
+```
+
+```{r}
+risk_schema <- higpt::make_schema("risk_summary") |>
+  higpt::add_field("topic", "string") |>
+  higpt::add_array_field("actions", "string") |>
+  higpt::finalize_schema()
+
+bundle <- higpt::bundle_prompt_schema(prompt_file, risk_schema)
+
+bundle$prompt_path
+names(bundle$schema$fields)
+```
+
+```{r}
+driver_notes <- data.frame(
+  metric = c("stockouts", "late deliveries", "returns"),
+  stringsAsFactors = FALSE
+)
+
+mock_rowwise_reply <- function(chat_messages, ...) {
+  paste("Analyst note:", chat_messages$content[[1]])
+}
+
+notes <- with_mocked_namespace_function("higpt", "continue_chat", mock_rowwise_reply, {
+  higpt::mutate_llm(
+    paste("Write one business interpretation for", driver_notes$metric),
+    model_name = "gpt-5-mini",
+    .progress = FALSE
+  )
+})
+
+data.frame(metric = driver_notes$metric, note = notes)
+```
+
+If your team uses local or OpenAI-compatible endpoints, `register_custom_model()`
+and `list_endpoint_models()` are worth learning as well because the same builder
+patterns then work against internal infrastructure too.
 
 ### Try it
 
 This exercise needs an API key.
 
-1. Ask `higpt` to summarise a messy business question.
-2. Ask it again, but require a structured JSON-like output.
-3. Compare the two answers. Which would be easier to plug into a real workflow?
+1. Use `get_available_models()` to find one model with structured outputs and
+   one with vision support.
+2. Build a `make_model()` template for a data-quality review.
+3. Add a schema and extract a one-row tibble with
+   `enforce_schema() |> collect_df()`.
 
 ### Stretch
 
-Create a tiny tool that returns:
+Create a small reusable workflow that includes all of these:
 
-- the number of rows in a data frame
-- the column names
-- the first two rows
-
-Then ask the model to profile a toy table by calling your tool.
+- a prompt file on disk
+- a schema built with `make_schema()`
+- either `mutate_llm()` across several rows or a custom tool built with `make_tool()`
+- optional logging with `enable_logging()`
 
 ## `higrate`: from data frames to reusable knowledge
 
@@ -106,8 +291,16 @@ Take in-memory tables and turn them into:
 ### Example with no LLM requirement
 
 ```{r}
-#| eval: false
 library(higrate)
+
+orders_dirty <- data.frame(
+  record_id = 1:6,
+  customer_id = c("C001", "C001", "C003", "C004", "C002", "C002"),
+  order_id = c("O100", "O101", "O300", "O400", "O200", "O200"),
+  order_date = as.Date(c("2025-01-03", "2025-01-08", "2025-02-01", "2025-02-05", "2025-01-10", "2025-01-10")),
+  order_status = c("shipped", "processing", "shipped", "processing", "processing", "cancelled"),
+  amount = c(1200, 950, 2000, 500, 850, 850)
+)
 
 orders_desc <- higrate::generate_table_description(
   orders_dirty,
@@ -180,15 +373,73 @@ rather than one-off prompts.
 
 ### Example
 
+`hidrogen` includes its own mock hook, so this chapter can run the exploration
+workflow without a live model endpoint.
+
 ```{r}
-#| eval: false
 library(hidrogen)
 
-exploration <- hidrogen::run_data_explorer(mtcars)
-exploration$report$executive_summary
+mock_hidrogen_chat <- function(chat_messages, tools, tool_handlers, system_message = NULL, ...) {
+  handler_names <- names(tool_handlers)
 
-model_run <- hidrogen::run_model_explorer(mtcars, target_col = "mpg", n_iterations = 1)
-model_run$explanation
+  if ("casefile_set_domain" %in% handler_names) {
+    tool_handlers$casefile_set_domain(list(
+      domain = "Vehicle efficiency analysis",
+      actors = c("analytics", "fleet managers"),
+      kpis = c("mpg")
+    ))
+    tool_handlers$casefile_add_hypothesis(list(
+      title = "Heavier cars consume more fuel",
+      statement = "mpg decreases as weight rises",
+      rationale = "The deterministic profile already flags wt vs mpg as a strong negative relationship.",
+      priority = "high"
+    ))
+  }
+
+  if ("casefile_record_evidence" %in% handler_names) {
+    tool_handlers$casefile_record_evidence(list(
+      hypothesis_id = "hypothesis_001",
+      summary = "The profile highlights wt vs mpg as one of the strongest negative correlations.",
+      quality = "stat_summary"
+    ))
+  }
+
+  if ("casefile_update_hypothesis" %in% handler_names) {
+    tool_handlers$casefile_update_hypothesis(list(
+      hypothesis_id = "hypothesis_001",
+      status = "supported",
+      note = "Deterministic diagnostics already support the direction of effect."
+    ))
+  }
+
+  if ("submit_exploration_report" %in% handler_names) {
+    tool_handlers$submit_exploration_report(list(
+      executive_summary = "Exploration complete for a mock fleet-efficiency dataset.",
+      key_insights = c("[hypothesis_001] Higher vehicle weight is associated with lower mpg."),
+      supporting_evidence = "The deterministic profile flagged wt vs mpg as one of the strongest negative correlations.",
+      next_steps = c(
+        "Fit a baseline regression on mpg ~ wt.",
+        "Check whether transmission still matters after controlling for weight."
+      )
+    ))
+  }
+
+  list(messages = data.frame(role = "assistant", content = "ok", stringsAsFactors = FALSE))
+}
+
+hidrogen::hidrogen_set_llm_mock(
+  chat_with_tools = mock_hidrogen_chat,
+  continue_chat = function(...) ""
+)
+
+invisible(utils::capture.output({
+  exploration <- hidrogen::run_data_explorer(mtcars, sample_rows = 3)
+}))
+
+hidrogen::hidrogen_reset_llm_mock()
+
+exploration$report$executive_summary
+exploration$report$key_insights
 ```
 
 ### Why it matters
@@ -215,27 +466,6 @@ Write:
 1. the goal
 2. the required tools
 3. the main failure modes
-
-## `hipilot`: AI inside RStudio
-
-`hipilot` is a practical add-in package, forked from `gptstudio`, that makes
-code-writing and code-editing workflows available inside RStudio.
-
-It is best thought of as a convenience layer, not a replacement for package
-fluency.
-
-### A good use of `hipilot`
-
-- drafting repetitive code
-- editing boilerplate
-- fixing small bugs
-- exploring hiverse functions quickly
-
-### A bad use of `hipilot`
-
-- asking it to write production code you do not understand
-- sending sensitive data in prompts
-- using it instead of learning `hiconnect`, `himunge`, or `hiproc`
 
 ## Think
 

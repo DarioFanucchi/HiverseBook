@@ -29,11 +29,12 @@ The following chunk creates a toy order table with a hidden key problem:
 
 ```{r}
 orders_dirty <- data.frame(
-  customer_id = c("C001", "C001", "C002", "C002", "C003", "C003"),
-  order_id = c("O100", "O100", "O200", "O200", "O300", "O300"),
-  order_date = c("2025-01-03", "2025-01-03", "2025-01-10", "2025-01-10", "2025-02-01", "2025-02-01"),
-  order_status = c("shipped", "cancelled", "processing", "processing", "shipped", "shipped"),
-  amount = c("1,200", "1,200", "850", "850", "2,000", "2,000"),
+  record_id = 1:6,
+  customer_id = c("C001", "C001", "C003", "C004", "C002", "C002"),
+  order_id = c("O100", "O101", "O300", "O400", "O200", "O200"),
+  order_date = c("2025-01-03", "2025-01-08", "2025-02-01", "2025-02-05", "2025-01-10", "2025-01-10"),
+  order_status = c("shipped", "processing", "shipped", "processing", "processing", "cancelled"),
+  amount = c("1,200", "950", "2,000", "500", "850", "850"),
   stringsAsFactors = FALSE
 )
 
@@ -59,7 +60,6 @@ are one of the fastest ways to discover real data problems.
 ### Example workflow
 
 ```{r}
-#| eval: false
 library(himunge)
 
 clean_orders <- orders_dirty |>
@@ -67,16 +67,25 @@ clean_orders <- orders_dirty |>
   himunge::convert_hidden_dates() |>
   himunge::convert_hidden_numerics()
 
-himunge::find_primary_keys(clean_orders)
+invisible(utils::capture.output({
+  key_candidates <- himunge::find_primary_keys(clean_orders)
+}))
 
-viol <- himunge::find_indices_violating_key(
+viol_cols <- himunge::find_cols_violating_key(
   clean_orders,
-  candidate_key = c("customer_id", "order_id"),
-  make_reduced_dataframe = TRUE
+  cols = c("order_id")
 )
 
-viol$rows
-viol$cols
+viol <- suppressWarnings(
+  himunge::find_indices_violating_key(
+    clean_orders,
+    candidate_key = c("order_id"),
+    make_reduced_dataframe = TRUE
+  )
+)
+
+key_candidates
+viol_cols
 viol$data
 ```
 
@@ -192,8 +201,7 @@ their `...` arguments, so you can write concise, structured messages without
 building strings manually.
 
 ```{r}
-#| eval: false
-library(hilog)
+suppressPackageStartupMessages(library(hilog))
 
 hilog::set_level_info()
 
@@ -216,11 +224,12 @@ useful than scattering `print()` calls through your code.
 ### A more realistic example
 
 ```{r}
-#| eval: false
 audit_orders <- function(df) {
   hilog::info("Starting order audit on %i rows and %i columns", nrow(df), ncol(df))
 
-  key_sets <- himunge::find_primary_keys(df)
+  invisible(utils::capture.output({
+    key_sets <- himunge::find_primary_keys(df)
+  }))
   hilog::info("Found %i candidate key sets", length(key_sets))
 
   if (length(key_sets) > 0) {
@@ -229,6 +238,8 @@ audit_orders <- function(df) {
     hilog::error("No primary key candidate found for current dataset")
   }
 }
+
+audit_orders(clean_orders)
 ```
 
 In practice, that means you do not need to guess where a script got to before
@@ -237,7 +248,6 @@ it failed or started behaving strangely.
 ### Debug level
 
 ```{r}
-#| eval: false
 hilog::set_level_debug()
 hilog::debug("Duplicate order_id count: %i", sum(duplicated(orders_dirty$order_id)))
 ```
@@ -274,7 +284,6 @@ days, weekly rollups, and month boundaries show up constantly.
 ### Simple example
 
 ```{r}
-#| eval: false
 library(hidate)
 
 date <- as.Date("2026-03-16")

@@ -19,7 +19,6 @@ supporting cast.
 | `himatch` | String matching and standardisation | Data quality / matching work | Good utility package |
 | `higest` | Structured ingestion pipelines | Process authors | Platform-oriented |
 | `hidalgo` | General algorithms/data structures | Package developers, niche use | Older and smaller |
-| `hipilot` | RStudio LLM add-ins | People coding interactively in RStudio | Productivity layer |
 
 ## A few package heuristics
 
@@ -44,14 +43,6 @@ supporting cast.
 
 - you need data dictionaries
 - you are building R Markdown outputs for others
-
-### Reach for `hipilot` when:
-
-- you want faster drafting inside RStudio
-- you already know what "good" code should look like
-
-Do not reach for `hipilot` when you need actual system understanding. Learn the
-packages first.
 
 ## Try it
 
