@@ -1,0 +1,112 @@
+---
+title: "Platform Workflows"
+---
+
+# Packages for Hudson process work
+
+Not every analyst needs these every day. But if you work close to the Hudson
+platform, they matter a lot.
+
+## `hiproc`: understanding processes, queues, and dependencies
+
+`hiproc` is important because Hudson is not just a collection of tables. It is
+also a process system. When something fails, runs late, or produces a strange
+output, you often need process context, not just data context.
+
+### What `hiproc` is good for
+
+- summarising process events
+- looking up dependencies
+- inspecting files and run parameters
+- understanding what happened before and after a process run
+
+### Example
+
+```{r}
+#| eval: false
+library(hiproc)
+
+events <- hiproc::event_summary()
+head(events)
+
+deps <- hiproc::get_dependencies("some_process_name")
+deps
+```
+
+### Process thinking
+
+```mermaid
+flowchart TD
+  A["Raw input file arrives"] --> B["Ingestion process runs"]
+  B --> C["Table is updated"]
+  C --> D["Downstream process runs"]
+  D --> E["Dashboard or forecast changes"]
+  F["hiproc"] --> B
+  F --> D
+```
+
+When work breaks in production, this is the package that helps you move from
+"the number looks wrong" to "which process or dependency likely caused it?"
+
+### Try it
+
+This exercise needs platform access.
+
+1. Run `event_summary()`.
+2. Pick one process that looks active or familiar.
+3. Inspect its dependencies.
+4. Sketch the upstream/downstream flow in your own words.
+
+### Stretch
+
+Choose one process output table and one upstream dependency. Ask:
+
+- what data enters here?
+- what process transforms it?
+- what would fail silently vs loudly?
+
+Then write a short incident note as if you were on support duty.
+
+## `higest`: standardised ingestion logic
+
+`higest` is not a day-one analyst package, but it is useful once you start
+building repeatable ingestion flows.
+
+The package frames ingestion as four steps:
+
+1. prepare
+2. read
+3. standardise
+4. write
+
+### Example pipeline shape
+
+```{r}
+#| eval: false
+pipeline <- higest::prepare("process X", my_format_df) |>
+  higest::add_read_spec_csv() |>
+  higest::add_transformation_identity() |>
+  higest::add_write_spec_replace()
+
+higest::run_higest_pipeline(pipeline)
+```
+
+The important lesson is not the exact function names. It is the idea that
+ingestion should be declared and inspectable, not hidden inside a one-off script.
+
+## Other platform-adjacent helpers
+
+- `hifile`: import/export helpers for files and file tables
+- `hidoc`: report and data-dictionary helpers
+- `hidash`: dashboard helpers for Shiny-based Hudson work
+- `hilog`: simple logging utilities that support package and process code
+
+You do not need to master these immediately, but you should know they exist.
+
+## Think
+
+When a stakeholder says "the dashboard changed unexpectedly", what is the right
+first question:
+
+- "Which model did we use?"
+- or "Which process ran, with which inputs, and what changed upstream?"

@@ -1,0 +1,330 @@
+---
+title: "Core Data Packages"
+---
+
+# The packages you will use most often
+
+For most data scientists at Isazi, the center of gravity is:
+
+- `himunge` for understanding and cleaning data
+- `hiconnect` for getting data in and out of Hudson databases
+- `hidate` for calendar logic that appears in real business work
+- `hilog` for making scripts and processes observable from the start
+
+If you become fluent with these four, the rest of the hiverse becomes easier.
+
+## `himunge`: your first stop for unfamiliar data
+
+`himunge` is the strongest all-round package in the ecosystem. It is useful
+because it helps with the actual first questions people ask about a dataset:
+
+- what do these columns mean?
+- what looks like a key?
+- which columns determine which others?
+- where is the data inconsistent?
+
+### A tiny messy dataset
+
+The following chunk creates a toy order table with a hidden key problem:
+
+```{r}
+orders_dirty <- data.frame(
+  customer_id = c("C001", "C001", "C002", "C002", "C003", "C003"),
+  order_id = c("O100", "O100", "O200", "O200", "O300", "O300"),
+  order_date = c("2025-01-03", "2025-01-03", "2025-01-10", "2025-01-10", "2025-02-01", "2025-02-01"),
+  order_status = c("shipped", "cancelled", "processing", "processing", "shipped", "shipped"),
+  amount = c("1,200", "1,200", "850", "850", "2,000", "2,000"),
+  stringsAsFactors = FALSE
+)
+
+dup_counts <- aggregate(
+  rep(1, nrow(orders_dirty)),
+  by = list(order_id = orders_dirty$order_id),
+  FUN = length
+)
+
+barplot(
+  dup_counts$x,
+  names.arg = dup_counts$order_id,
+  col = "#0b6e69",
+  main = "Rows per order_id in the toy dataset",
+  ylab = "Count"
+)
+abline(h = 1, lty = 2, col = "#a44a1f")
+```
+
+The point is not the bar chart itself. The point is that duplicate-looking keys
+are one of the fastest ways to discover real data problems.
+
+### Example workflow
+
+```{r}
+#| eval: false
+library(himunge)
+
+clean_orders <- orders_dirty |>
+  himunge::fix_column_names() |>
+  himunge::convert_hidden_dates() |>
+  himunge::convert_hidden_numerics()
+
+himunge::find_primary_keys(clean_orders)
+
+viol <- himunge::find_indices_violating_key(
+  clean_orders,
+  candidate_key = c("customer_id", "order_id"),
+  make_reduced_dataframe = TRUE
+)
+
+viol$rows
+viol$cols
+viol$data
+```
+
+### Why this matters
+
+This is the kind of workflow that helps a data scientist answer:
+
+- "Is this really one row per order?"
+- "Which columns disagree when the key stays fixed?"
+- "Do I trust this table enough to model from it?"
+
+### Try it
+
+1. Add a `sales_rep` column that is perfectly determined by `customer_id`.
+2. Run `himunge::get_column_dependency_tree()` on the cleaned data.
+3. Explain which columns appear downstream and why.
+
+### Stretch
+
+Build a new toy admissions dataset with columns like:
+
+- `student_id`
+- `campus`
+- `programme`
+- `intake_month`
+- `fee_band`
+- `advisor`
+
+Then:
+
+1. use `find_primary_keys()`
+2. introduce a deliberate key violation
+3. use `find_indices_violating_key()` to isolate the bad rows
+4. write a one-paragraph summary of the issue as if you were reporting it to a client
+
+## `hiconnect`: the main route into Hudson data
+
+`hiconnect` matters because most real Hudson work eventually touches a database.
+It is not just a thin wrapper over `DBI`; it encodes Hudson conventions around
+schemas, outputs, and process configuration.
+
+### The important idea
+
+Before you can query anything, you usually need a valid process config file.
+The package README calls this out explicitly.
+
+```{r}
+#| eval: false
+library(hiconnect)
+
+generate_first_hiconnect_config(
+  host = "your-host",
+  user = "your-user",
+  password = "your-password"
+)
+```
+
+Then the common workflow is:
+
+```{r}
+#| eval: false
+con <- hiconnect::pg_connect(c("scratch", "process"))
+on.exit(DBI::dbDisconnect(con), add = TRUE)
+
+row_count <- hiconnect::pg_count("scratch", "some_table", con = con)
+sample_tbl <- hiconnect::pg_get_table("scratch", "some_table", limit = 100, con = con)
+```
+
+### How to think about `hiconnect`
+
+Use it when you need to:
+
+- inspect tables quickly
+- read or write Hudson data safely
+- build process-aware code
+- avoid hand-written connection boilerplate in every script
+
+### Try it
+
+This exercise needs Hudson database access.
+
+1. Connect to one schema you are allowed to access.
+2. Pick one table and count its rows.
+3. Pull the first few rows.
+4. Identify what you believe the primary key might be before using `himunge`.
+
+### Stretch
+
+Use `hiconnect` and `himunge` together:
+
+1. read a table from Hudson
+2. propose a key with `find_primary_keys()`
+3. check whether any columns violate that key
+4. write down whether the table looks model-ready
+
+## `hilog`: log early, log clearly
+
+`hilog` is small, but it is worth learning early because it encourages a good
+habit: code should say what it is doing while it runs.
+
+That matters in:
+
+- long-running scripts
+- data-quality audits
+- package code
+- Hudson processes
+- debugging interactive work that later becomes production code
+
+### The core idea
+
+The logging functions support `sprintf`-style interpolation directly through
+their `...` arguments, so you can write concise, structured messages without
+building strings manually.
+
+```{r}
+#| eval: false
+library(hilog)
+
+hilog::set_level_info()
+
+hilog::info("Loaded %i rows from %s", 1250, "orders_extract.csv")
+hilog::info("Coverage after cleaning: %.1f%%", 97.4)
+```
+
+That style is worth copying. It keeps the message template stable and pushes
+the changing values into arguments.
+
+A typical emitted line looks like:
+
+```text
+[2026-03-16 10:15:00 audit_orders] INFO: Starting order audit on 6 rows and 5 columns
+```
+
+The timestamp and calling context come for free, which is why this is more
+useful than scattering `print()` calls through your code.
+
+### A more realistic example
+
+```{r}
+#| eval: false
+audit_orders <- function(df) {
+  hilog::info("Starting order audit on %i rows and %i columns", nrow(df), ncol(df))
+
+  key_sets <- himunge::find_primary_keys(df)
+  hilog::info("Found %i candidate key sets", length(key_sets))
+
+  if (length(key_sets) > 0) {
+    hilog::info("Smallest candidate key: %s", paste(key_sets[[1]], collapse = ", "))
+  } else {
+    hilog::error("No primary key candidate found for current dataset")
+  }
+}
+```
+
+In practice, that means you do not need to guess where a script got to before
+it failed or started behaving strangely.
+
+### Debug level
+
+```{r}
+#| eval: false
+hilog::set_level_debug()
+hilog::debug("Duplicate order_id count: %i", sum(duplicated(orders_dirty$order_id)))
+```
+
+Use `info()` for progress, `debug()` for extra detail, and `error()` for
+messages that should always be visible.
+
+### Try it
+
+1. Add `hilog::info()` calls to one of your own analysis scripts.
+2. Log:
+   - how many rows were loaded
+   - how many columns were selected
+   - what key you think the table has
+3. Rewrite one message using `%i`, `%s`, or `%.2f` formatting instead of `paste()`.
+
+### Stretch
+
+Take the earlier `himunge` toy exercise and add logging at each step:
+
+1. raw row count
+2. cleaned row count
+3. number of candidate key sets found
+4. whether violations were detected
+
+Then imagine that script runs overnight. Which log lines would help you most
+the next morning?
+
+## `hidate`: small package, very high practical value
+
+Many Isazi projects are date-heavy. Forecast cutoffs, planning windows, working
+days, weekly rollups, and month boundaries show up constantly.
+
+### Simple example
+
+```{r}
+#| eval: false
+library(hidate)
+
+date <- as.Date("2026-03-16")
+
+hidate::start_of_month(date)
+hidate::end_of_month(date)
+hidate::start_of_week(date)
+hidate::end_of_week(date)
+hidate::diff_weekdays(c(as.Date("2026-03-16"), as.Date("2026-03-31")))
+```
+
+### A visual: working-day accumulation
+
+```{r}
+march_days <- seq(as.Date("2026-03-01"), as.Date("2026-03-31"), by = "day")
+weekday_flag <- weekdays(march_days) %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+cum_weekdays <- cumsum(weekday_flag)
+
+plot(
+  march_days,
+  cum_weekdays,
+  type = "l",
+  lwd = 3,
+  col = "#0b6e69",
+  xlab = "Date",
+  ylab = "Cumulative weekdays",
+  main = "Why date helpers matter in planning work"
+)
+grid()
+```
+
+### Try it
+
+1. Pick a date relevant to your project.
+2. Compute its month start, month end, week start, and week end.
+3. Work out how many weekdays remain in that month.
+
+### Stretch
+
+Write a function called `planning_window()` that returns:
+
+- the current week start
+- the current month end
+- the number of weekdays between them
+
+Then compare your result with `hidate::diff_weekdays()`.
+
+## Think
+
+Which is riskier on a real project:
+
+- getting the model wrong
+- or getting the date logic wrong before the model is even run?

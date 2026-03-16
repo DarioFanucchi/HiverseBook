@@ -1,0 +1,17 @@
+$body-bg: #f6f5ef;
+$body-color: #14211f;
+$link-color: #0b6e69;
+$code-color: #7f2f20;
+$primary: #0b6e69;
+
+.quarto-title-block .quarto-title .title {
+  letter-spacing: 0.01em;
+}
+
+.callout.callout-tip {
+  border-left-color: #0b6e69;
+}
+
+.callout.callout-warning {
+  border-left-color: #a44a1f;
+}

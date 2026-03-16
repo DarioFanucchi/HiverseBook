@@ -1,0 +1,44 @@
+project:
+  type: book
+  output-dir: docs
+  resources:
+    - "*.pdf"
+
+book:
+  title: "Getting Started with the Hiverse"
+  subtitle: "A practical self-study guide for Isazi employees"
+  author: "Dario Fanucchi"
+  repo-url: https://github.com/DarioFanucchi/HiverseBook
+  repo-actions: [issue, source]
+  downloads: [pdf]
+  page-navigation: true
+  search: true
+  chapters:
+    - index.qmd
+    - 01-setup.qmd
+    - 02-core-data.qmd
+    - 03-platform-workflows.qmd
+    - 04-ai-extensions.qmd
+    - 05-modeling-and-forecasting.qmd
+    - 06-specialist-packages.qmd
+    - 07-supporting-packages.qmd
+    - 08-capstone.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+    css: styles.scss
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+  pdf:
+    documentclass: scrreprt
+    toc: true
+    colorlinks: true
+
+execute:
+  warning: false
+  message: false
+  freeze: auto

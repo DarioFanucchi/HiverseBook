@@ -1,0 +1,107 @@
+---
+title: "Modeling and Forecasting"
+---
+
+# Where `himodel` fits
+
+`himodel` is not the most universal package in the hiverse, but it is important
+for forecasting and structured modeling work.
+
+It is best understood as a modeling utility package with a strong forecasting
+flavor, not as a general replacement for all of R's modeling ecosystem.
+
+## What it is useful for
+
+- forecast error calculation
+- forecast reshaping and reallocation
+- helper utilities around time-based model workflows
+
+## A minimal example
+
+```{r}
+#| eval: false
+library(himodel)
+
+forecast_eval <- data.frame(
+  sku = c("A", "A", "A", "B", "B", "B"),
+  actual = c(100, 120, 110, 80, 75, 90),
+  forecast = c(95, 130, 100, 82, 70, 88)
+)
+
+himodel::compute_error(
+  forecast_eval,
+  measure_level = c("sku"),
+  report_level = c("sku"),
+  actual_var = "actual",
+  pred_var = "forecast"
+)
+```
+
+## Why this matters
+
+A lot of poor forecasting practice starts before the model itself:
+
+- wrong aggregation level
+- poor error reporting
+- hidden bias
+- weak hierarchy handling
+
+`himodel` is useful when you want a standard way to talk about those things.
+
+## A simple visual
+
+```{r}
+actual <- c(100, 120, 110, 80, 75, 90)
+forecast <- c(95, 130, 100, 82, 70, 88)
+period <- seq_along(actual)
+
+matplot(
+  period,
+  cbind(actual, forecast),
+  type = "b",
+  pch = c(16, 17),
+  lty = 1,
+  col = c("#0b6e69", "#a44a1f"),
+  xlab = "Period",
+  ylab = "Value",
+  main = "Actuals vs forecast"
+)
+legend(
+  "topright",
+  legend = c("Actual", "Forecast"),
+  col = c("#0b6e69", "#a44a1f"),
+  lty = 1,
+  pch = c(16, 17),
+  bty = "n"
+)
+```
+
+## Try it
+
+1. Build a toy forecast-versus-actual dataset for two products or customers.
+2. Compute the error summary.
+3. Identify which series has the worst relative bias.
+
+## Stretch
+
+Use a monthly series such as `AirPassengers` or a small project series and ask:
+
+1. what is the reporting level?
+2. what is the measurement level?
+3. what would a stakeholder want to see in an error report?
+
+Then sketch the table you would want `himodel` to produce.
+
+## Where it connects to other packages
+
+- `hidate` for time boundaries
+- `himunge` for shaping the input data
+- `hipoint` for regime shifts and anomalies
+- `higrate` if you want AI-generated narratives around modeled tables
+
+## Think
+
+What is the fastest way to lose stakeholder trust in a forecasting project:
+
+- a small model miss
+- or unclear, inconsistent error reporting?

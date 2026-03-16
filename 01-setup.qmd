@@ -1,0 +1,128 @@
+---
+title: "Setup and Installation"
+---
+
+# Install the packages the Hudson way
+
+Most Hudson packages live in GitLab, so the first hurdle is not R code. It is
+package access and installation discipline.
+
+## Step 1: create a GitLab personal access token
+
+At a high level:
+
+1. Open your GitLab account settings.
+2. Go to the access token area.
+3. Create a token with the scopes needed to read packages and repositories.
+4. Store it safely.
+
+Then add it to `~/.Renviron`:
+
+```{r}
+#| eval: false
+usethis::edit_r_environ()
+```
+
+Add a line like:
+
+```text
+GITLAB_PAT=glpat-your-token-goes-here
+```
+
+Restart R after saving.
+
+::: {.callout-warning}
+Do not hard-code tokens in scripts, notebooks, or project files.
+:::
+
+## Step 2: install `hiverse`
+
+`hiverse` is the meta-package that gives you a convenient entry point.
+
+```{r}
+#| eval: false
+install.packages("devtools")
+devtools::install_gitlab("isazi/hudson-packages/hiverse@main")
+library(hiverse)
+```
+
+## Step 3: install the common package set
+
+`hiverse` can install the common packages for you:
+
+```{r}
+#| eval: false
+hiverse::install_hudson_packages("common")
+```
+
+That common set currently includes the main packages new employees are most
+likely to use first, such as `hiconnect`, `himunge`, `hiproc`, `hidate`,
+`hilog`, `higpt`, `higrate`, `hidrogen`, and `himodel`.
+
+## Step 4: install optional packages only when needed
+
+Some packages are more specialist and should usually be installed when the work
+demands them:
+
+```{r}
+#| eval: false
+devtools::install_gitlab("isazi/hudson-packages/hipoint")
+devtools::install_gitlab("isazi/hudson-packages/hisched")
+```
+
+Other optional packages exist as well, especially for supply-chain work, but
+you do not need all of them on day one.
+
+## A quick installation check
+
+Once packages are installed, run a quick sanity check:
+
+```{r}
+#| eval: false
+required_pkgs <- c(
+  "hiverse", "himunge", "hiconnect", "hidate", "hilog", "hiproc",
+  "higpt", "higrate", "hidrogen", "himodel"
+)
+
+data.frame(
+  package = required_pkgs,
+  installed = vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)
+)
+```
+
+## Recommended learning order
+
+If you are a new joiner and want the shortest path to competence:
+
+1. `himunge`
+2. `hiconnect`
+3. `hidate`
+4. `hilog`
+5. `hiproc` if you touch processes
+6. `higpt`
+7. `higrate`
+8. `hidrogen`
+9. `himodel`
+10. `hipoint` or `hisched` if your project calls for them
+
+## Try it
+
+1. Install `hiverse`.
+2. Install the common packages.
+3. Verify that `requireNamespace("himunge", quietly = TRUE)` returns `TRUE`.
+4. Write down which packages failed to install, if any, and why.
+
+## Stretch
+
+Create a small script called `check_hiverse_install.R` that:
+
+- checks a package list
+- prints which packages are installed
+- prints `sessionInfo()` at the end
+
+This is a good first "works on my machine" diagnostic to keep around.
+
+## Think
+
+Why is `hiverse` useful even if you could install every package directly with
+`devtools::install_gitlab()`?

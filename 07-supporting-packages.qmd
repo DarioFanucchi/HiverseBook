@@ -1,0 +1,67 @@
+---
+title: "Supporting Packages at a Glance"
+---
+
+# The rest of the toolbox
+
+You do not need a full chapter for every package, but you should know the
+supporting cast.
+
+## Quick catalog
+
+| Package | Main use | Who should care first? | Current role |
+|---|---|---|---|
+| `hiplot` | Hudson plotting theme and palettes | Analysts making internal plots | Lightweight but handy |
+| `hilog` | Simple logging | Everyone writing reusable analysis, scripts, or processes | Important early-use helper; see the core chapter |
+| `hifile` | File import/export helpers | Ingestion and reporting work | Useful support package |
+| `hidoc` | R Markdown and data-dictionary helpers | Reporting-heavy work | Useful, but rougher docs |
+| `hidash` | Dashboard utilities | Shiny dashboard builders | Niche but useful |
+| `himatch` | String matching and standardisation | Data quality / matching work | Good utility package |
+| `higest` | Structured ingestion pipelines | Process authors | Platform-oriented |
+| `hidalgo` | General algorithms/data structures | Package developers, niche use | Older and smaller |
+| `hipilot` | RStudio LLM add-ins | People coding interactively in RStudio | Productivity layer |
+
+## A few package heuristics
+
+### Reach for `hiplot` when:
+
+- the plot is internally useful but visually inconsistent
+- you want an Isazi/Hudson house style quickly
+
+### Reach for `hilog` when:
+
+- you want your script to explain what it is doing while it runs
+- you are writing a package or process that needs explicit logs
+- you want debug/info/error behavior without inventing your own logger
+
+### Reach for `himatch` when:
+
+- entity names are messy
+- you need standardisation before joining or grouping
+- stakeholders keep saying "these should match, but they do not"
+
+### Reach for `hidoc` when:
+
+- you need data dictionaries
+- you are building R Markdown outputs for others
+
+### Reach for `hipilot` when:
+
+- you want faster drafting inside RStudio
+- you already know what "good" code should look like
+
+Do not reach for `hipilot` when you need actual system understanding. Learn the
+packages first.
+
+## Try it
+
+Pick one of these supporting packages and answer:
+
+1. what problem does it remove?
+2. what would you do without it?
+3. is it general-purpose or workflow-specific?
+
+## Think
+
+A package can be useful without being central. Which supporting package do you
+think you are most likely to underuse at first?

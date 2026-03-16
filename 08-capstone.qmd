@@ -1,0 +1,124 @@
+---
+title: "Capstone Exercises"
+---
+
+# Pull the pieces together
+
+These capstone exercises are meant to feel more like real Isazi work and less
+like isolated package demos.
+
+## Capstone 1: first-contact data audit
+
+Goal: inspect an unfamiliar table and decide whether it is trustworthy enough
+for downstream use.
+
+Suggested stack:
+
+- `hiconnect`
+- `himunge`
+- `hilog`
+- `hidate` if dates are involved
+
+### Task
+
+1. Read a table from Hudson, or simulate one locally.
+2. Propose one or more candidate keys with `himunge::find_primary_keys()`.
+3. Use `himunge::find_indices_violating_key()` to identify suspicious rows.
+4. Write a one-page audit note with:
+   - candidate key
+   - key violations
+   - missing-value concerns
+   - date issues
+   - whether the table is fit for modeling
+5. Add `hilog::info()` messages so the audit leaves a readable execution trace.
+
+## Capstone 2: build a mini knowledge base
+
+Goal: move from "I explored these two tables once" to "the team can reuse what
+I learned".
+
+Suggested stack:
+
+- `himunge`
+- `higrate`
+- optionally `higpt`
+
+### Task
+
+1. Create or load two related tables.
+2. Generate descriptions for each.
+3. Discover the relationship between them.
+4. Save the result mentally or on disk as if it were the start of a real KB.
+5. Write a short note explaining what a new joiner should know about these tables.
+
+## Capstone 3: platform incident walkthrough
+
+Goal: reason about a surprising downstream output.
+
+Suggested stack:
+
+- `hiproc`
+- `hiconnect`
+- `himunge`
+
+### Task
+
+Imagine a stakeholder says:
+
+"Yesterday's dashboard looked fine. Today's looks wrong."
+
+Work through:
+
+1. which process likely refreshed the output?
+2. what upstream dependencies should you inspect?
+3. which table would you validate first?
+4. what quick `himunge` checks would you run after pulling the data?
+
+## Capstone 4: AI-assisted exploration with guardrails
+
+Goal: use the AI packages without surrendering judgment.
+
+Suggested stack:
+
+- `higpt`
+- `higrate`
+- `hidrogen`
+
+### Task
+
+1. Ask `higpt` to produce a structured exploration plan for a small dataset.
+2. Use `higrate` to profile the table heuristically.
+3. Compare the human view, the heuristic view, and the LLM view.
+4. Decide what an agentic workflow should automate and what should stay manual.
+
+## Capstone 5: specialist deep dive
+
+Choose one:
+
+- `hipoint` for change points and anomalies
+- `hisched` for heuristic optimisation and timetable design
+
+### Task for `hipoint`
+
+1. Create a signal with a regime change and a few suspicious spikes.
+2. Detect change points.
+3. Detect anomalies.
+4. Explain where algorithmic output and domain intuition disagree.
+
+### Task for `hisched`
+
+1. Study the sample scheduling inputs.
+2. Build the initial problem object.
+3. Explain what the objective is trying to balance.
+4. Write a short brief for a non-technical stakeholder describing why a heuristic approach is reasonable.
+
+## Final reflection
+
+By this point you should be able to answer:
+
+- Which package would I reach for first?
+- Which packages are infrastructure rather than analysis tools?
+- Which tasks are ready for AI assistance, and which still need strong human judgment?
+
+If you cannot answer those yet, go back to the earlier chapters and rerun the
+small exercises with your own data.

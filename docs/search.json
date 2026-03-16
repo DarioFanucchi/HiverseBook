@@ -1,0 +1,582 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Getting Started with the Hiverse",
+    "section": "",
+    "text": "1 Why this book?\nThe Hudson “hiverse” is powerful, but it is not flat. A few packages are useful almost every week, a few are important for platform work, and a few are specialist tools that only matter in the right problem domain.\nThis book is designed as a self-study guide for new Isazi employees. It focuses on:\nYou do not need to learn every package at once. The recommended path is:",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#the-package-map",
+    "href": "index.html#the-package-map",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.1 The package map",
+    "text": "1.1 The package map\nflowchart LR\n  A[\"Raw files, tables, process outputs\"] --&gt; B[\"himunge\"]\n  A --&gt; C[\"hiconnect\"]\n  B --&gt; D[\"higrate\"]\n  C --&gt; D\n  B --&gt; E[\"himodel\"]\n  C --&gt; F[\"hiproc\"]\n  B --&gt; G[\"hisched\"]\n  H[\"LLM providers\"] --&gt; I[\"higpt\"]\n  I --&gt; D\n  I --&gt; J[\"hidrogen\"]\n  I --&gt; K[\"hipilot\"]\n  L[\"Time-based analysis\"] --&gt; M[\"hidate\"]\n  M --&gt; E\n  M --&gt; G\n  N[\"Signals and monitoring\"] --&gt; O[\"hipoint\"]",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-book",
+    "href": "index.html#how-to-use-this-book",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.2 How to use this book",
+    "text": "1.2 How to use this book\n\nRead the overviews quickly.\nType the examples yourself if you can.\nDo the exercises with your own variations.\nKeep notes on what felt easy, awkward, or surprisingly useful.\n\nEach chapter has a few activities:\n\nTry it: a direct exercise to build fluency.\nStretch: a more open-ended task closer to real project work.\nThink: a short reflection prompt about tradeoffs or workflow design.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#what-this-book-assumes",
+    "href": "index.html#what-this-book-assumes",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.3 What this book assumes",
+    "text": "1.3 What this book assumes\n\nYou can run R locally.\nYou have access to GitLab and a personal access token.\nYou may or may not have live Hudson database access yet.\n\nWhere an exercise needs a live database or an API key, it is marked clearly. Whenever possible, the examples use small local data frames or package sample data instead.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#packages-covered",
+    "href": "index.html#packages-covered",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.4 Packages covered",
+    "text": "1.4 Packages covered\nDeep-dive chapters:\n\nhiconnect\nhimunge\nhidate\nhiproc\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint\nhisched\n\nSupporting package catalog:\n\nhiplot\nhilog\nhifile\nhidoc\nhidash\nhimatch\nhigest\nhidalgo\nhipilot",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#suggested-study-tracks",
+    "href": "index.html#suggested-study-tracks",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.5 Suggested study tracks",
+    "text": "1.5 Suggested study tracks\n\n\n\n\n\n\n\n\nTrack\nPackages\nWhy start here?\n\n\n\n\nCore data scientist track\nhimunge, hiconnect, hidate, hiproc, himodel\nThese packages are closest to day-to-day Hudson analysis and platform work.\n\n\nAI-era extension track\nhigpt, higrate, hidrogen, hipilot\nThese packages add leverage once you already understand the underlying data and workflows.\n\n\nSpecialist track\nhipoint, hisched\nHigh-value in the right domain, but not required for every new joiner immediately.\n\n\nSupporting tools track\nhiplot, hilog, hifile, hidoc, hidash, himatch, higest, hidalgo\nUseful context and workflow support, but not the best first investment for most people.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#what-success-looks-like",
+    "href": "index.html#what-success-looks-like",
+    "title": "Getting Started with the Hiverse",
+    "section": "1.6 What success looks like",
+    "text": "1.6 What success looks like\nBy the end of the book, a new team member should be able to:\n\ninstall the hiverse packages cleanly\ninspect a new dataset and reason about keys, quality, and relationships\nunderstand the difference between data work, platform work, and AI workflow tooling\ndecide which package to reach for before starting a task\ncomplete one small end-to-end exploration using the Hudson stack",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html",
+    "href": "01-setup.html",
+    "title": "2  Setup and Installation",
+    "section": "",
+    "text": "3 Install the packages the Hudson way\nMost Hudson packages live in GitLab, so the first hurdle is not R code. It is package access and installation discipline.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#step-1-create-a-gitlab-personal-access-token",
+    "href": "01-setup.html#step-1-create-a-gitlab-personal-access-token",
+    "title": "2  Setup and Installation",
+    "section": "3.1 Step 1: create a GitLab personal access token",
+    "text": "3.1 Step 1: create a GitLab personal access token\nAt a high level:\n\nOpen your GitLab account settings.\nGo to the access token area.\nCreate a token with the scopes needed to read packages and repositories.\nStore it safely.\n\nThen add it to ~/.Renviron:\n\nusethis::edit_r_environ()\n\nAdd a line like:\nGITLAB_PAT=glpat-your-token-goes-here\nRestart R after saving.\n\n\n\n\n\n\nWarning\n\n\n\nDo not hard-code tokens in scripts, notebooks, or project files.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#step-2-install-hiverse",
+    "href": "01-setup.html#step-2-install-hiverse",
+    "title": "2  Setup and Installation",
+    "section": "3.2 Step 2: install hiverse",
+    "text": "3.2 Step 2: install hiverse\nhiverse is the meta-package that gives you a convenient entry point.\n\ninstall.packages(\"devtools\")\ndevtools::install_gitlab(\"isazi/hudson-packages/hiverse@main\")\nlibrary(hiverse)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#step-3-install-the-common-package-set",
+    "href": "01-setup.html#step-3-install-the-common-package-set",
+    "title": "2  Setup and Installation",
+    "section": "3.3 Step 3: install the common package set",
+    "text": "3.3 Step 3: install the common package set\nhiverse can install the common packages for you:\n\nhiverse::install_hudson_packages(\"common\")\n\nThat common set currently includes the main packages new employees are most likely to use first, such as hiconnect, himunge, hiproc, hidate, higpt, higrate, hidrogen, and himodel.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#step-4-install-optional-packages-only-when-needed",
+    "href": "01-setup.html#step-4-install-optional-packages-only-when-needed",
+    "title": "2  Setup and Installation",
+    "section": "3.4 Step 4: install optional packages only when needed",
+    "text": "3.4 Step 4: install optional packages only when needed\nSome packages are more specialist and should usually be installed when the work demands them:\n\ndevtools::install_gitlab(\"isazi/hudson-packages/hipoint\")\ndevtools::install_gitlab(\"isazi/hudson-packages/hisched\")\n\nOther optional packages exist as well, especially for supply-chain work, but you do not need all of them on day one.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#a-quick-installation-check",
+    "href": "01-setup.html#a-quick-installation-check",
+    "title": "2  Setup and Installation",
+    "section": "3.5 A quick installation check",
+    "text": "3.5 A quick installation check\nOnce packages are installed, run a quick sanity check:\n\nrequired_pkgs &lt;- c(\n  \"hiverse\", \"himunge\", \"hiconnect\", \"hidate\", \"hiproc\",\n  \"higpt\", \"higrate\", \"hidrogen\", \"himodel\"\n)\n\ndata.frame(\n  package = required_pkgs,\n  installed = vapply(required_pkgs, requireNamespace, logical(1), quietly = TRUE)\n)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#recommended-learning-order",
+    "href": "01-setup.html#recommended-learning-order",
+    "title": "2  Setup and Installation",
+    "section": "3.6 Recommended learning order",
+    "text": "3.6 Recommended learning order\nIf you are a new joiner and want the shortest path to competence:\n\nhimunge\nhiconnect\nhidate\nhiproc if you touch processes\nhigpt\nhigrate\nhidrogen\nhimodel\nhipoint or hisched if your project calls for them",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#try-it",
+    "href": "01-setup.html#try-it",
+    "title": "2  Setup and Installation",
+    "section": "3.7 Try it",
+    "text": "3.7 Try it\n\nInstall hiverse.\nInstall the common packages.\nVerify that requireNamespace(\"himunge\", quietly = TRUE) returns TRUE.\nWrite down which packages failed to install, if any, and why.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#stretch",
+    "href": "01-setup.html#stretch",
+    "title": "2  Setup and Installation",
+    "section": "3.8 Stretch",
+    "text": "3.8 Stretch\nCreate a small script called check_hiverse_install.R that:\n\nchecks a package list\nprints which packages are installed\nprints sessionInfo() at the end\n\nThis is a good first “works on my machine” diagnostic to keep around.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "01-setup.html#think",
+    "href": "01-setup.html#think",
+    "title": "2  Setup and Installation",
+    "section": "3.9 Think",
+    "text": "3.9 Think\nWhy is hiverse useful even if you could install every package directly with devtools::install_gitlab()?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Setup and Installation</span>"
+    ]
+  },
+  {
+    "objectID": "02-core-data.html",
+    "href": "02-core-data.html",
+    "title": "3  Core Data Packages",
+    "section": "",
+    "text": "4 The packages you will use most often\nFor most data scientists at Isazi, the center of gravity is:\nIf you become fluent with these three, the rest of the hiverse becomes easier.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-core-data.html#himunge-your-first-stop-for-unfamiliar-data",
+    "href": "02-core-data.html#himunge-your-first-stop-for-unfamiliar-data",
+    "title": "3  Core Data Packages",
+    "section": "4.1 himunge: your first stop for unfamiliar data",
+    "text": "4.1 himunge: your first stop for unfamiliar data\nhimunge is the strongest all-round package in the ecosystem. It is useful because it helps with the actual first questions people ask about a dataset:\n\nwhat do these columns mean?\nwhat looks like a key?\nwhich columns determine which others?\nwhere is the data inconsistent?\n\n\n4.1.1 A tiny messy dataset\nThe following chunk creates a toy order table with a hidden key problem:\n\norders_dirty &lt;- data.frame(\n  customer_id = c(\"C001\", \"C001\", \"C002\", \"C002\", \"C003\", \"C003\"),\n  order_id = c(\"O100\", \"O100\", \"O200\", \"O200\", \"O300\", \"O300\"),\n  order_date = c(\"2025-01-03\", \"2025-01-03\", \"2025-01-10\", \"2025-01-10\", \"2025-02-01\", \"2025-02-01\"),\n  order_status = c(\"shipped\", \"cancelled\", \"processing\", \"processing\", \"shipped\", \"shipped\"),\n  amount = c(\"1,200\", \"1,200\", \"850\", \"850\", \"2,000\", \"2,000\"),\n  stringsAsFactors = FALSE\n)\n\ndup_counts &lt;- aggregate(\n  rep(1, nrow(orders_dirty)),\n  by = list(order_id = orders_dirty$order_id),\n  FUN = length\n)\n\nbarplot(\n  dup_counts$x,\n  names.arg = dup_counts$order_id,\n  col = \"#0b6e69\",\n  main = \"Rows per order_id in the toy dataset\",\n  ylab = \"Count\"\n)\nabline(h = 1, lty = 2, col = \"#a44a1f\")\n\n\n\n\n\n\n\n\nThe point is not the bar chart itself. The point is that duplicate-looking keys are one of the fastest ways to discover real data problems.\n\n\n4.1.2 Example workflow\n\nlibrary(himunge)\n\nclean_orders &lt;- orders_dirty |&gt;\n  himunge::fix_column_names() |&gt;\n  himunge::convert_hidden_dates() |&gt;\n  himunge::convert_hidden_numerics()\n\nhimunge::find_primary_keys(clean_orders)\n\nviol &lt;- himunge::find_indices_violating_key(\n  clean_orders,\n  candidate_key = c(\"customer_id\", \"order_id\"),\n  make_reduced_dataframe = TRUE\n)\n\nviol$rows\nviol$cols\nviol$data\n\n\n\n4.1.3 Why this matters\nThis is the kind of workflow that helps a data scientist answer:\n\n“Is this really one row per order?”\n“Which columns disagree when the key stays fixed?”\n“Do I trust this table enough to model from it?”\n\n\n\n4.1.4 Try it\n\nAdd a sales_rep column that is perfectly determined by customer_id.\nRun himunge::get_column_dependency_tree() on the cleaned data.\nExplain which columns appear downstream and why.\n\n\n\n4.1.5 Stretch\nBuild a new toy admissions dataset with columns like:\n\nstudent_id\ncampus\nprogramme\nintake_month\nfee_band\nadvisor\n\nThen:\n\nuse find_primary_keys()\nintroduce a deliberate key violation\nuse find_indices_violating_key() to isolate the bad rows\nwrite a one-paragraph summary of the issue as if you were reporting it to a client",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-core-data.html#hiconnect-the-main-route-into-hudson-data",
+    "href": "02-core-data.html#hiconnect-the-main-route-into-hudson-data",
+    "title": "3  Core Data Packages",
+    "section": "4.2 hiconnect: the main route into Hudson data",
+    "text": "4.2 hiconnect: the main route into Hudson data\nhiconnect matters because most real Hudson work eventually touches a database. It is not just a thin wrapper over DBI; it encodes Hudson conventions around schemas, outputs, and process configuration.\n\n4.2.1 The important idea\nBefore you can query anything, you usually need a valid process config file. The package README calls this out explicitly.\n\nlibrary(hiconnect)\n\ngenerate_first_hiconnect_config(\n  host = \"your-host\",\n  user = \"your-user\",\n  password = \"your-password\"\n)\n\nThen the common workflow is:\n\ncon &lt;- hiconnect::pg_connect(c(\"scratch\", \"process\"))\non.exit(DBI::dbDisconnect(con), add = TRUE)\n\nrow_count &lt;- hiconnect::pg_count(\"scratch\", \"some_table\", con = con)\nsample_tbl &lt;- hiconnect::pg_get_table(\"scratch\", \"some_table\", limit = 100, con = con)\n\n\n\n4.2.2 How to think about hiconnect\nUse it when you need to:\n\ninspect tables quickly\nread or write Hudson data safely\nbuild process-aware code\navoid hand-written connection boilerplate in every script\n\n\n\n4.2.3 Try it\nThis exercise needs Hudson database access.\n\nConnect to one schema you are allowed to access.\nPick one table and count its rows.\nPull the first few rows.\nIdentify what you believe the primary key might be before using himunge.\n\n\n\n4.2.4 Stretch\nUse hiconnect and himunge together:\n\nread a table from Hudson\npropose a key with find_primary_keys()\ncheck whether any columns violate that key\nwrite down whether the table looks model-ready",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-core-data.html#hidate-small-package-very-high-practical-value",
+    "href": "02-core-data.html#hidate-small-package-very-high-practical-value",
+    "title": "3  Core Data Packages",
+    "section": "4.3 hidate: small package, very high practical value",
+    "text": "4.3 hidate: small package, very high practical value\nMany Isazi projects are date-heavy. Forecast cutoffs, planning windows, working days, weekly rollups, and month boundaries show up constantly.\n\n4.3.1 Simple example\n\nlibrary(hidate)\n\ndate &lt;- as.Date(\"2026-03-16\")\n\nhidate::start_of_month(date)\nhidate::end_of_month(date)\nhidate::start_of_week(date)\nhidate::end_of_week(date)\nhidate::diff_weekdays(c(as.Date(\"2026-03-16\"), as.Date(\"2026-03-31\")))\n\n\n\n4.3.2 A visual: working-day accumulation\n\nmarch_days &lt;- seq(as.Date(\"2026-03-01\"), as.Date(\"2026-03-31\"), by = \"day\")\nweekday_flag &lt;- weekdays(march_days) %in% c(\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\")\ncum_weekdays &lt;- cumsum(weekday_flag)\n\nplot(\n  march_days,\n  cum_weekdays,\n  type = \"l\",\n  lwd = 3,\n  col = \"#0b6e69\",\n  xlab = \"Date\",\n  ylab = \"Cumulative weekdays\",\n  main = \"Why date helpers matter in planning work\"\n)\ngrid()\n\n\n\n\n\n\n\n\n\n\n4.3.3 Try it\n\nPick a date relevant to your project.\nCompute its month start, month end, week start, and week end.\nWork out how many weekdays remain in that month.\n\n\n\n4.3.4 Stretch\nWrite a function called planning_window() that returns:\n\nthe current week start\nthe current month end\nthe number of weekdays between them\n\nThen compare your result with hidate::diff_weekdays().",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-core-data.html#think",
+    "href": "02-core-data.html#think",
+    "title": "3  Core Data Packages",
+    "section": "4.4 Think",
+    "text": "4.4 Think\nWhich is riskier on a real project:\n\ngetting the model wrong\nor getting the date logic wrong before the model is even run?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Core Data Packages</span>"
+    ]
+  },
+  {
+    "objectID": "03-platform-workflows.html",
+    "href": "03-platform-workflows.html",
+    "title": "4  Platform Workflows",
+    "section": "",
+    "text": "5 Packages for Hudson process work\nNot every analyst needs these every day. But if you work close to the Hudson platform, they matter a lot.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Platform Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "03-platform-workflows.html#hiproc-understanding-processes-queues-and-dependencies",
+    "href": "03-platform-workflows.html#hiproc-understanding-processes-queues-and-dependencies",
+    "title": "4  Platform Workflows",
+    "section": "5.1 hiproc: understanding processes, queues, and dependencies",
+    "text": "5.1 hiproc: understanding processes, queues, and dependencies\nhiproc is important because Hudson is not just a collection of tables. It is also a process system. When something fails, runs late, or produces a strange output, you often need process context, not just data context.\n\n5.1.1 What hiproc is good for\n\nsummarising process events\nlooking up dependencies\ninspecting files and run parameters\nunderstanding what happened before and after a process run\n\n\n\n5.1.2 Example\n\nlibrary(hiproc)\n\nevents &lt;- hiproc::event_summary()\nhead(events)\n\ndeps &lt;- hiproc::get_dependencies(\"some_process_name\")\ndeps\n\n\n\n5.1.3 Process thinking\nflowchart TD\n  A[\"Raw input file arrives\"] --&gt; B[\"Ingestion process runs\"]\n  B --&gt; C[\"Table is updated\"]\n  C --&gt; D[\"Downstream process runs\"]\n  D --&gt; E[\"Dashboard or forecast changes\"]\n  F[\"hiproc\"] --&gt; B\n  F --&gt; D\nWhen work breaks in production, this is the package that helps you move from “the number looks wrong” to “which process or dependency likely caused it?”\n\n\n5.1.4 Try it\nThis exercise needs platform access.\n\nRun event_summary().\nPick one process that looks active or familiar.\nInspect its dependencies.\nSketch the upstream/downstream flow in your own words.\n\n\n\n5.1.5 Stretch\nChoose one process output table and one upstream dependency. Ask:\n\nwhat data enters here?\nwhat process transforms it?\nwhat would fail silently vs loudly?\n\nThen write a short incident note as if you were on support duty.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Platform Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "03-platform-workflows.html#higest-standardised-ingestion-logic",
+    "href": "03-platform-workflows.html#higest-standardised-ingestion-logic",
+    "title": "4  Platform Workflows",
+    "section": "5.2 higest: standardised ingestion logic",
+    "text": "5.2 higest: standardised ingestion logic\nhigest is not a day-one analyst package, but it is useful once you start building repeatable ingestion flows.\nThe package frames ingestion as four steps:\n\nprepare\nread\nstandardise\nwrite\n\n\n5.2.1 Example pipeline shape\n\npipeline &lt;- higest::prepare(\"process X\", my_format_df) |&gt;\n  higest::add_read_spec_csv() |&gt;\n  higest::add_transformation_identity() |&gt;\n  higest::add_write_spec_replace()\n\nhigest::run_higest_pipeline(pipeline)\n\nThe important lesson is not the exact function names. It is the idea that ingestion should be declared and inspectable, not hidden inside a one-off script.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Platform Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "03-platform-workflows.html#other-platform-adjacent-helpers",
+    "href": "03-platform-workflows.html#other-platform-adjacent-helpers",
+    "title": "4  Platform Workflows",
+    "section": "5.3 Other platform-adjacent helpers",
+    "text": "5.3 Other platform-adjacent helpers\n\nhifile: import/export helpers for files and file tables\nhidoc: report and data-dictionary helpers\nhidash: dashboard helpers for Shiny-based Hudson work\nhilog: simple logging utilities that support package and process code\n\nYou do not need to master these immediately, but you should know they exist.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Platform Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "03-platform-workflows.html#think",
+    "href": "03-platform-workflows.html#think",
+    "title": "4  Platform Workflows",
+    "section": "5.4 Think",
+    "text": "5.4 Think\nWhen a stakeholder says “the dashboard changed unexpectedly”, what is the right first question:\n\n“Which model did we use?”\nor “Which process ran, with which inputs, and what changed upstream?”",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Platform Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html",
+    "href": "04-ai-extensions.html",
+    "title": "5  AI-Era Extensions",
+    "section": "",
+    "text": "6 The newer AI layer\nThese packages sit on top of the more traditional Hudson stack.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html#higpt-the-foundation-layer",
+    "href": "04-ai-extensions.html#higpt-the-foundation-layer",
+    "title": "5  AI-Era Extensions",
+    "section": "6.1 higpt: the foundation layer",
+    "text": "6.1 higpt: the foundation layer\nIf you only learn one AI package well, learn higpt.\nIt is the main LLM interface package for the ecosystem and supports:\n\nchat\ntool calling\nstructured outputs\nembeddings\nimage and audio workflows\nmultiple providers\n\n\n6.1.1 Minimal example\n\nlibrary(higpt)\n\nSys.setenv(OPENAI_API_KEY = \"sk-...\")\n\nreply &lt;- higpt::continue_chat(\n  data.frame(role = \"user\", content = \"Summarise why primary keys matter in data quality.\"),\n  model_name = \"gpt-5-mini\",\n  reasoning_effort = \"minimal\"\n)\n\ncat(reply)\n\n\n\n6.1.2 Tool-calling example\n\ntool &lt;- higpt::new_tool_function(\n  name = \"add_numbers\",\n  description = \"Add two numbers.\",\n  parameters = list(\n    type = \"object\",\n    properties = list(\n      a = list(type = \"number\"),\n      b = list(type = \"number\")\n    ),\n    required = list(\"a\", \"b\")\n  )\n)\n\nhandlers &lt;- list(\n  add_numbers = function(args) as.character(args$a + args$b)\n)\n\nhigpt::chat_with_tools(\n  chat_messages = data.frame(role = \"user\", content = \"What is 12 + 30?\"),\n  tools = list(tool),\n  tool_handlers = handlers,\n  model_name = \"gpt-5-mini\",\n  reasoning_effort = \"minimal\"\n)\n\n\n\n6.1.3 Try it\nThis exercise needs an API key.\n\nAsk higpt to summarise a messy business question.\nAsk it again, but require a structured JSON-like output.\nCompare the two answers. Which would be easier to plug into a real workflow?\n\n\n\n6.1.4 Stretch\nCreate a tiny tool that returns:\n\nthe number of rows in a data frame\nthe column names\nthe first two rows\n\nThen ask the model to profile a toy table by calling your tool.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html#higrate-from-data-frames-to-reusable-knowledge",
+    "href": "04-ai-extensions.html#higrate-from-data-frames-to-reusable-knowledge",
+    "title": "5  AI-Era Extensions",
+    "section": "6.2 higrate: from data frames to reusable knowledge",
+    "text": "6.2 higrate: from data frames to reusable knowledge\nhigrate is one of the most interesting newer packages because it connects classic data profiling with AI-generated narratives and relationship discovery.\n\n6.2.1 The core move\nTake in-memory tables and turn them into:\n\ncandidate keys\nsummary statistics\nrelationship suggestions\nreusable knowledge-base entries\n\n\n\n6.2.2 Example with no LLM requirement\n\nlibrary(higrate)\n\norders_desc &lt;- higrate::generate_table_description(\n  orders_dirty,\n  table_name = \"orders\",\n  use_llm = FALSE,\n  use_llm_columns = FALSE\n)\n\ncustomers &lt;- data.frame(\n  customer_id = c(\"C001\", \"C002\", \"C003\"),\n  segment = c(\"retail\", \"retail\", \"wholesale\"),\n  region = c(\"Gauteng\", \"Western Cape\", \"KZN\")\n)\n\ncustomers_desc &lt;- higrate::generate_table_description(\n  customers,\n  table_name = \"customers\",\n  use_llm = FALSE,\n  use_llm_columns = FALSE\n)\n\nrel &lt;- higrate::generate_relationships(\n  orders_desc,\n  customers_desc,\n  use_llm = FALSE\n)\n\nrel$proposed_relationships\n\n\n\n6.2.3 Relationship thinking\nflowchart LR\n  A[\"orders\"] --&gt;|\"customer_id\"| B[\"customers\"]\n  A --&gt;|\"product_id\"| C[\"products\"]\n  B --&gt; D[\"customer narrative\"]\n  C --&gt; E[\"product narrative\"]\n  A --&gt; F[\"table profile\"]\n  F --&gt; G[\"knowledge base entry\"]\n\n\n6.2.4 Try it\n\nBuild two toy tables with a clear join path.\nRun generate_table_description(..., use_llm = FALSE).\nRun generate_relationships(..., use_llm = FALSE).\nDecide whether the discovered relationship is actually useful.\n\n\n\n6.2.5 Stretch\nChoose a real project table pair and design a small knowledge base:\n\nwhich tables deserve narratives?\nwhich relationships matter?\nwhat would you want a new teammate to learn from the saved KB?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html#hidrogen-agentic-workflows-on-top-of-the-stack",
+    "href": "04-ai-extensions.html#hidrogen-agentic-workflows-on-top-of-the-stack",
+    "title": "5  AI-Era Extensions",
+    "section": "6.3 hidrogen: agentic workflows on top of the stack",
+    "text": "6.3 hidrogen: agentic workflows on top of the stack\nhidrogen is the package to look at when you want orchestrated AI workflows rather than one-off prompts.\n\n6.3.1 What to focus on\n\nrun_data_explorer() for exploration\nrun_model_explorer() for model-oriented workflows\nworkflow YAML files\nprompt files\ntool registry design\n\n\n\n6.3.2 Example\n\nlibrary(hidrogen)\n\nexploration &lt;- hidrogen::run_data_explorer(mtcars)\nexploration$report$executive_summary\n\nmodel_run &lt;- hidrogen::run_model_explorer(mtcars, target_col = \"mpg\", n_iterations = 1)\nmodel_run$explanation\n\n\n\n6.3.3 Why it matters\nhidrogen teaches a more important lesson than any one workflow: if you want AI systems to be dependable, they need structure, tools, and auditable steps.\n\n\n6.3.4 Try it\n\nRead one prompt file from hidrogen.\nIdentify which parts are domain knowledge and which parts are workflow control.\nSuggest one improvement to make the workflow safer or clearer.\n\n\n\n6.3.5 Stretch\nDesign a new workflow idea for your team. Example:\n\ndata dictionary builder\nprocess incident explainer\nfirst-pass forecast QA agent\n\nWrite:\n\nthe goal\nthe required tools\nthe main failure modes",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html#hipilot-ai-inside-rstudio",
+    "href": "04-ai-extensions.html#hipilot-ai-inside-rstudio",
+    "title": "5  AI-Era Extensions",
+    "section": "6.4 hipilot: AI inside RStudio",
+    "text": "6.4 hipilot: AI inside RStudio\nhipilot is a practical add-in package, forked from gptstudio, that makes code-writing and code-editing workflows available inside RStudio.\nIt is best thought of as a convenience layer, not a replacement for package fluency.\n\n6.4.1 A good use of hipilot\n\ndrafting repetitive code\nediting boilerplate\nfixing small bugs\nexploring hiverse functions quickly\n\n\n\n6.4.2 A bad use of hipilot\n\nasking it to write production code you do not understand\nsending sensitive data in prompts\nusing it instead of learning hiconnect, himunge, or hiproc",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "04-ai-extensions.html#think",
+    "href": "04-ai-extensions.html#think",
+    "title": "5  AI-Era Extensions",
+    "section": "6.5 Think",
+    "text": "6.5 Think\nWhich of these creates more value in practice:\n\nan LLM that can talk about your data\nor a workflow that turns data knowledge into reusable team memory?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>AI-Era Extensions</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html",
+    "href": "05-modeling-and-forecasting.html",
+    "title": "6  Modeling and Forecasting",
+    "section": "",
+    "text": "7 Where himodel fits\nhimodel is not the most universal package in the hiverse, but it is important for forecasting and structured modeling work.\nIt is best understood as a modeling utility package with a strong forecasting flavor, not as a general replacement for all of R’s modeling ecosystem.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#what-it-is-useful-for",
+    "href": "05-modeling-and-forecasting.html#what-it-is-useful-for",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.1 What it is useful for",
+    "text": "7.1 What it is useful for\n\nforecast error calculation\nforecast reshaping and reallocation\nhelper utilities around time-based model workflows",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#a-minimal-example",
+    "href": "05-modeling-and-forecasting.html#a-minimal-example",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.2 A minimal example",
+    "text": "7.2 A minimal example\n\nlibrary(himodel)\n\nforecast_eval &lt;- data.frame(\n  sku = c(\"A\", \"A\", \"A\", \"B\", \"B\", \"B\"),\n  actual = c(100, 120, 110, 80, 75, 90),\n  forecast = c(95, 130, 100, 82, 70, 88)\n)\n\nhimodel::compute_error(\n  forecast_eval,\n  measure_level = c(\"sku\"),\n  report_level = c(\"sku\"),\n  actual_var = \"actual\",\n  pred_var = \"forecast\"\n)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#why-this-matters",
+    "href": "05-modeling-and-forecasting.html#why-this-matters",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.3 Why this matters",
+    "text": "7.3 Why this matters\nA lot of poor forecasting practice starts before the model itself:\n\nwrong aggregation level\npoor error reporting\nhidden bias\nweak hierarchy handling\n\nhimodel is useful when you want a standard way to talk about those things.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#a-simple-visual",
+    "href": "05-modeling-and-forecasting.html#a-simple-visual",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.4 A simple visual",
+    "text": "7.4 A simple visual\n\nactual &lt;- c(100, 120, 110, 80, 75, 90)\nforecast &lt;- c(95, 130, 100, 82, 70, 88)\nperiod &lt;- seq_along(actual)\n\nmatplot(\n  period,\n  cbind(actual, forecast),\n  type = \"b\",\n  pch = c(16, 17),\n  lty = 1,\n  col = c(\"#0b6e69\", \"#a44a1f\"),\n  xlab = \"Period\",\n  ylab = \"Value\",\n  main = \"Actuals vs forecast\"\n)\nlegend(\n  \"topright\",\n  legend = c(\"Actual\", \"Forecast\"),\n  col = c(\"#0b6e69\", \"#a44a1f\"),\n  lty = 1,\n  pch = c(16, 17),\n  bty = \"n\"\n)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#try-it",
+    "href": "05-modeling-and-forecasting.html#try-it",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.5 Try it",
+    "text": "7.5 Try it\n\nBuild a toy forecast-versus-actual dataset for two products or customers.\nCompute the error summary.\nIdentify which series has the worst relative bias.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#stretch",
+    "href": "05-modeling-and-forecasting.html#stretch",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.6 Stretch",
+    "text": "7.6 Stretch\nUse a monthly series such as AirPassengers or a small project series and ask:\n\nwhat is the reporting level?\nwhat is the measurement level?\nwhat would a stakeholder want to see in an error report?\n\nThen sketch the table you would want himodel to produce.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#where-it-connects-to-other-packages",
+    "href": "05-modeling-and-forecasting.html#where-it-connects-to-other-packages",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.7 Where it connects to other packages",
+    "text": "7.7 Where it connects to other packages\n\nhidate for time boundaries\nhimunge for shaping the input data\nhipoint for regime shifts and anomalies\nhigrate if you want AI-generated narratives around modeled tables",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "05-modeling-and-forecasting.html#think",
+    "href": "05-modeling-and-forecasting.html#think",
+    "title": "6  Modeling and Forecasting",
+    "section": "7.8 Think",
+    "text": "7.8 Think\nWhat is the fastest way to lose stakeholder trust in a forecasting project:\n\na small model miss\nor unclear, inconsistent error reporting?",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Modeling and Forecasting</span>"
+    ]
+  },
+  {
+    "objectID": "06-specialist-packages.html",
+    "href": "06-specialist-packages.html",
+    "title": "7  Specialist Packages",
+    "section": "",
+    "text": "8 Two optional packages worth knowing early\nEven though they are optional, hipoint and hisched are interesting enough that new employees should at least know what they are for.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Specialist Packages</span>"
+    ]
+  },
+  {
+    "objectID": "06-specialist-packages.html#hipoint-change-points-and-anomalies",
+    "href": "06-specialist-packages.html#hipoint-change-points-and-anomalies",
+    "title": "7  Specialist Packages",
+    "section": "8.1 hipoint: change points and anomalies",
+    "text": "8.1 hipoint: change points and anomalies\nhipoint is useful when the core question is not “what is the average trend?” but rather:\n\nwhen did the regime change?\nwhich observations are suspicious?\nshould this time series be treated as stable at all?\n\n\n8.1.1 The package view\nThe package exposes:\n\noutlier.detect_anomalies()\nchpts.detect_changepoints()\n\nplus several specific methods under the hood.\n\n\n8.1.2 Example\n\nlibrary(hipoint)\n\nsignal_df &lt;- data.frame(\n  date = seq.Date(as.Date(\"2026-01-01\"), by = \"day\", length.out = 30),\n  signal = c(rep(10, 10), rep(18, 10), rep(17, 10))\n)\n\nhipoint::chpts.detect_changepoints(\n  signal_df,\n  index = \"date\",\n  signal = \"signal\",\n  method = \"intercept\"\n)\n\nhipoint::outlier.detect_anomalies(\n  signal_df,\n  index = \"date\",\n  signal = \"signal\",\n  method = \"mad\"\n)\n\n\n\n8.1.3 A visual intuition\n\nset.seed(42)\nsignal_df &lt;- data.frame(\n  idx = 1:40,\n  signal = c(rnorm(15, mean = 10, sd = 0.8), rnorm(15, mean = 18, sd = 0.8), 32, rnorm(9, mean = 17, sd = 0.8))\n)\n\nplot(\n  signal_df$idx,\n  signal_df$signal,\n  type = \"b\",\n  pch = 16,\n  col = \"#0b6e69\",\n  xlab = \"Index\",\n  ylab = \"Signal\",\n  main = \"A synthetic series with a regime shift and one obvious anomaly\"\n)\nabline(v = 15.5, lty = 2, col = \"#a44a1f\")\npoints(31, signal_df$signal[31], pch = 19, col = \"#a44a1f\", cex = 1.3)\nlegend(\n  \"topleft\",\n  legend = c(\"Signal\", \"Candidate changepoint\", \"Candidate anomaly\"),\n  col = c(\"#0b6e69\", \"#a44a1f\", \"#a44a1f\"),\n  lty = c(1, 2, NA),\n  pch = c(16, NA, 19),\n  bty = \"n\"\n)\n\n\n\n\n\n\n\n\n\n\n8.1.4 Try it\n\nCreate a series with one level shift and one outlier.\nRun both chpts.detect_changepoints() and outlier.detect_anomalies().\nCompare whether the methods agree with your visual intuition.\n\n\n\n8.1.5 Stretch\nTake a real business metric that should be fairly stable. Ask:\n\nwhat counts as drift?\nwhat counts as a one-off anomaly?\nwhat should trigger human investigation?",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Specialist Packages</span>"
+    ]
+  },
+  {
+    "objectID": "06-specialist-packages.html#hisched-heuristic-scheduling-and-timetable-improvement",
+    "href": "06-specialist-packages.html#hisched-heuristic-scheduling-and-timetable-improvement",
+    "title": "7  Specialist Packages",
+    "section": "8.2 hisched: heuristic scheduling and timetable improvement",
+    "text": "8.2 hisched: heuristic scheduling and timetable improvement\nhisched is optional because it is domain-specific, but it is one of the more substantial specialist packages in the ecosystem. It is recent, large, and well tested.\n\n8.2.1 What it is for\nhisched helps build and improve schedules, especially in school or timetable contexts where:\n\nteacher constraints matter\nstudent clashes matter\nfeasible is not the same as optimal\nfast improvement heuristics are more practical than exact global optimisation\n\n\n\n8.2.2 The package workflow\nflowchart LR\n  A[\"Enrollments\"] --&gt; B[\"make_schedule_problem()\"]\n  C[\"Scheduler inputs\"] --&gt; B\n  B --&gt; D[\"create_initial_schedule()\"]\n  D --&gt; E[\"score() / validate()\"]\n  E --&gt; F[\"do_annealing()\"]\n  F --&gt; G[\"repair_sequence()\"]\n  G --&gt; H[\"export or inspect\"]\n\n\n8.2.3 Example with the package sample data\n\nlibrary(hisched)\n\nproblem &lt;- hisched::make_schedule_problem(\n  enrol = hisched::enrol_sample,\n  sched_input = hisched::sched_input_sample,\n  target_date = as.Date(\"2026-01-12\"),\n  school = \"IEB\",\n  phase = \"FET\"\n)\n\nproblem &lt;- hisched::create_initial_schedule(problem)\nproblem &lt;- hisched::score(problem)\nproblem &lt;- hisched::validate(problem)\n\n\n\n8.2.4 Why this package is interesting even if you never schedule timetables\nIt is a good example of:\n\nheuristic search\nsimulated annealing\nscoring design\nbalancing feasibility against improvement\n\nThat makes it worth reading as an engineering package, not only a domain package.\n\n\n8.2.5 Try it\n\nRead the hisched README and map the main stages of the algorithm.\nLoad the sample data.\nIdentify which objects are inputs, which are state, and which are outputs.\n\n\n\n8.2.6 Stretch\nSuppose a stakeholder says:\n“We do not need the globally best schedule. We need a clearly better schedule by tomorrow, and we need to understand why it improved.”\nWrite a short note explaining why a heuristic package like hisched may be a better fit than a purely exact optimizer.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Specialist Packages</span>"
+    ]
+  },
+  {
+    "objectID": "06-specialist-packages.html#think",
+    "href": "06-specialist-packages.html#think",
+    "title": "7  Specialist Packages",
+    "section": "8.3 Think",
+    "text": "8.3 Think\nWhat do hipoint and hisched have in common?\nThey both help in settings where the real problem is not just prediction. It is decision support under imperfect structure.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Specialist Packages</span>"
+    ]
+  },
+  {
+    "objectID": "07-supporting-packages.html",
+    "href": "07-supporting-packages.html",
+    "title": "8  Supporting Packages at a Glance",
+    "section": "",
+    "text": "9 The rest of the toolbox\nYou do not need a full chapter for every package, but you should know the supporting cast.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
+    ]
+  },
+  {
+    "objectID": "07-supporting-packages.html#quick-catalog",
+    "href": "07-supporting-packages.html#quick-catalog",
+    "title": "8  Supporting Packages at a Glance",
+    "section": "9.1 Quick catalog",
+    "text": "9.1 Quick catalog\n\n\n\n\n\n\n\n\n\nPackage\nMain use\nWho should care first?\nCurrent role\n\n\n\n\nhiplot\nHudson plotting theme and palettes\nAnalysts making internal plots\nLightweight but handy\n\n\nhilog\nSimple logging\nProcess/package developers\nSmall infrastructure helper\n\n\nhifile\nFile import/export helpers\nIngestion and reporting work\nUseful support package\n\n\nhidoc\nR Markdown and data-dictionary helpers\nReporting-heavy work\nUseful, but rougher docs\n\n\nhidash\nDashboard utilities\nShiny dashboard builders\nNiche but useful\n\n\nhimatch\nString matching and standardisation\nData quality / matching work\nGood utility package\n\n\nhigest\nStructured ingestion pipelines\nProcess authors\nPlatform-oriented\n\n\nhidalgo\nGeneral algorithms/data structures\nPackage developers, niche use\nOlder and smaller\n\n\nhipilot\nRStudio LLM add-ins\nPeople coding interactively in RStudio\nProductivity layer",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
+    ]
+  },
+  {
+    "objectID": "07-supporting-packages.html#a-few-package-heuristics",
+    "href": "07-supporting-packages.html#a-few-package-heuristics",
+    "title": "8  Supporting Packages at a Glance",
+    "section": "9.2 A few package heuristics",
+    "text": "9.2 A few package heuristics\n\n9.2.1 Reach for hiplot when:\n\nthe plot is internally useful but visually inconsistent\nyou want an Isazi/Hudson house style quickly\n\n\n\n9.2.2 Reach for hilog when:\n\nyou are writing a package or process that needs explicit logs\nyou want debug/info/error behavior without inventing your own logger\n\n\n\n9.2.3 Reach for himatch when:\n\nentity names are messy\nyou need standardisation before joining or grouping\nstakeholders keep saying “these should match, but they do not”\n\n\n\n9.2.4 Reach for hidoc when:\n\nyou need data dictionaries\nyou are building R Markdown outputs for others\n\n\n\n9.2.5 Reach for hipilot when:\n\nyou want faster drafting inside RStudio\nyou already know what “good” code should look like\n\nDo not reach for hipilot when you need actual system understanding. Learn the packages first.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
+    ]
+  },
+  {
+    "objectID": "07-supporting-packages.html#try-it",
+    "href": "07-supporting-packages.html#try-it",
+    "title": "8  Supporting Packages at a Glance",
+    "section": "9.3 Try it",
+    "text": "9.3 Try it\nPick one of these supporting packages and answer:\n\nwhat problem does it remove?\nwhat would you do without it?\nis it general-purpose or workflow-specific?",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
+    ]
+  },
+  {
+    "objectID": "07-supporting-packages.html#think",
+    "href": "07-supporting-packages.html#think",
+    "title": "8  Supporting Packages at a Glance",
+    "section": "9.4 Think",
+    "text": "9.4 Think\nA package can be useful without being central. Which supporting package do you think you are most likely to underuse at first?",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Supporting Packages at a Glance</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html",
+    "href": "08-capstone.html",
+    "title": "9  Capstone Exercises",
+    "section": "",
+    "text": "10 Pull the pieces together\nThese capstone exercises are meant to feel more like real Isazi work and less like isolated package demos.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#capstone-1-first-contact-data-audit",
+    "href": "08-capstone.html#capstone-1-first-contact-data-audit",
+    "title": "9  Capstone Exercises",
+    "section": "10.1 Capstone 1: first-contact data audit",
+    "text": "10.1 Capstone 1: first-contact data audit\nGoal: inspect an unfamiliar table and decide whether it is trustworthy enough for downstream use.\nSuggested stack:\n\nhiconnect\nhimunge\nhidate if dates are involved\n\n\n10.1.1 Task\n\nRead a table from Hudson, or simulate one locally.\nPropose one or more candidate keys with himunge::find_primary_keys().\nUse himunge::find_indices_violating_key() to identify suspicious rows.\nWrite a one-page audit note with:\n\ncandidate key\nkey violations\nmissing-value concerns\ndate issues\nwhether the table is fit for modeling",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#capstone-2-build-a-mini-knowledge-base",
+    "href": "08-capstone.html#capstone-2-build-a-mini-knowledge-base",
+    "title": "9  Capstone Exercises",
+    "section": "10.2 Capstone 2: build a mini knowledge base",
+    "text": "10.2 Capstone 2: build a mini knowledge base\nGoal: move from “I explored these two tables once” to “the team can reuse what I learned”.\nSuggested stack:\n\nhimunge\nhigrate\noptionally higpt\n\n\n10.2.1 Task\n\nCreate or load two related tables.\nGenerate descriptions for each.\nDiscover the relationship between them.\nSave the result mentally or on disk as if it were the start of a real KB.\nWrite a short note explaining what a new joiner should know about these tables.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#capstone-3-platform-incident-walkthrough",
+    "href": "08-capstone.html#capstone-3-platform-incident-walkthrough",
+    "title": "9  Capstone Exercises",
+    "section": "10.3 Capstone 3: platform incident walkthrough",
+    "text": "10.3 Capstone 3: platform incident walkthrough\nGoal: reason about a surprising downstream output.\nSuggested stack:\n\nhiproc\nhiconnect\nhimunge\n\n\n10.3.1 Task\nImagine a stakeholder says:\n“Yesterday’s dashboard looked fine. Today’s looks wrong.”\nWork through:\n\nwhich process likely refreshed the output?\nwhat upstream dependencies should you inspect?\nwhich table would you validate first?\nwhat quick himunge checks would you run after pulling the data?",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#capstone-4-ai-assisted-exploration-with-guardrails",
+    "href": "08-capstone.html#capstone-4-ai-assisted-exploration-with-guardrails",
+    "title": "9  Capstone Exercises",
+    "section": "10.4 Capstone 4: AI-assisted exploration with guardrails",
+    "text": "10.4 Capstone 4: AI-assisted exploration with guardrails\nGoal: use the AI packages without surrendering judgment.\nSuggested stack:\n\nhigpt\nhigrate\nhidrogen\n\n\n10.4.1 Task\n\nAsk higpt to produce a structured exploration plan for a small dataset.\nUse higrate to profile the table heuristically.\nCompare the human view, the heuristic view, and the LLM view.\nDecide what an agentic workflow should automate and what should stay manual.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#capstone-5-specialist-deep-dive",
+    "href": "08-capstone.html#capstone-5-specialist-deep-dive",
+    "title": "9  Capstone Exercises",
+    "section": "10.5 Capstone 5: specialist deep dive",
+    "text": "10.5 Capstone 5: specialist deep dive\nChoose one:\n\nhipoint for change points and anomalies\nhisched for heuristic optimisation and timetable design\n\n\n10.5.1 Task for hipoint\n\nCreate a signal with a regime change and a few suspicious spikes.\nDetect change points.\nDetect anomalies.\nExplain where algorithmic output and domain intuition disagree.\n\n\n\n10.5.2 Task for hisched\n\nStudy the sample scheduling inputs.\nBuild the initial problem object.\nExplain what the objective is trying to balance.\nWrite a short brief for a non-technical stakeholder describing why a heuristic approach is reasonable.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  },
+  {
+    "objectID": "08-capstone.html#final-reflection",
+    "href": "08-capstone.html#final-reflection",
+    "title": "9  Capstone Exercises",
+    "section": "10.6 Final reflection",
+    "text": "10.6 Final reflection\nBy this point you should be able to answer:\n\nWhich package would I reach for first?\nWhich packages are infrastructure rather than analysis tools?\nWhich tasks are ready for AI assistance, and which still need strong human judgment?\n\nIf you cannot answer those yet, go back to the earlier chapters and rerun the small exercises with your own data.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Capstone Exercises</span>"
+    ]
+  }
+]
