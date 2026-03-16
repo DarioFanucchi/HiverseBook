@@ -48,7 +48,13 @@ ul.task-list li input[type="checkbox"] {
 document.addEventListener("DOMContentLoaded", function () {
   if (window.mermaid) {
     mermaid.initialize({ startOnLoad: false });
-    mermaid.run({ querySelector: "pre.mermaid" });
+    document.querySelectorAll("pre.mermaid").forEach(function (el) {
+      const div = document.createElement("div");
+      div.className = "mermaid";
+      div.textContent = el.textContent;
+      el.replaceWith(div);
+    });
+    mermaid.run({ querySelector: "div.mermaid" });
   }
 });
 </script>

@@ -83,7 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 document.addEventListener("DOMContentLoaded", function () {
   if (window.mermaid) {
     mermaid.initialize({ startOnLoad: false });
-    mermaid.run({ querySelector: "pre.mermaid" });
+    document.querySelectorAll("pre.mermaid").forEach(function (el) {
+      const div = document.createElement("div");
+      div.className = "mermaid";
+      div.textContent = el.textContent;
+      el.replaceWith(div);
+    });
+    mermaid.run({ querySelector: "div.mermaid" });
   }
 });
 </script>
