@@ -114,7 +114,7 @@ contexts where:
 
 ### The package workflow
 
-```mermaid
+```{mermaid}
 flowchart LR
   A["Enrollments"] --> B["make_schedule_problem()"]
   C["Scheduler inputs"] --> B

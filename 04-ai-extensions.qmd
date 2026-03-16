@@ -140,7 +140,7 @@ rel$proposed_relationships
 
 ### Relationship thinking
 
-```mermaid
+```{mermaid}
 flowchart LR
   A["orders"] -->|"customer_id"| B["customers"]
   A -->|"product_id"| C["products"]

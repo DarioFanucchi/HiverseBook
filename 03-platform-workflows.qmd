@@ -35,7 +35,7 @@ deps
 
 ### Process thinking
 
-```mermaid
+```{mermaid}
 flowchart TD
   A["Raw input file arrives"] --> B["Ingestion process runs"]
   B --> C["Table is updated"]

@@ -25,7 +25,7 @@ You do not need to learn every package at once. The recommended path is:
 
 ## The package map
 
-```mermaid
+```{mermaid}
 flowchart LR
   A["Raw files, tables, process outputs"] --> B["himunge"]
   A --> C["hiconnect"]
